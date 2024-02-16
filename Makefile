@@ -7,7 +7,7 @@ CPPFLAGS=-Wall -W -ansi -pedantic $(OPTIMFLAGS) $(PKG_CFLAGS)
 LDFLAGS= $(shell pkg-config --libs $(PACKAGES))
 BIN=out
 
-all: clean $(BIN)
+all: $(BIN)
 
 clean:
 	@echo "Cleaning..."
