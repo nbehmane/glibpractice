@@ -4,13 +4,9 @@
 			<arg name="greeting" direction="in" type="s"/>
 			<arg name="response" direction="out" type="s"/>
 		</method>
-		<method name="setA">
-			<arg name="a" direction="in" type="u"/>
-			<arg name="received_a" direction="out" type="u"/>
-		</method>
-		<method name="setB">
-			<arg name="b" direction="in" type="u"/>
-			<arg name="received_b" direction="out" type="u"/>
+		<method name="setNumbers">
+			<arg name="numbers" direction="in" type="au"/>
+			<arg name="response" direction="out" type="au"/>
 		</method>
 		<method name="Add">
 			<arg name="output" direction="out" type="u"/>

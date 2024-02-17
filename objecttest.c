@@ -243,7 +243,7 @@ _g_dbus_codegen_marshal_BOOLEAN__OBJECT_STRING (
 }
 
 static void
-_g_dbus_codegen_marshal_BOOLEAN__OBJECT_UINT (
+_g_dbus_codegen_marshal_BOOLEAN__OBJECT_VARIANT (
     GClosure     *closure,
     GValue       *return_value,
     unsigned int  n_param_values,
@@ -251,12 +251,12 @@ _g_dbus_codegen_marshal_BOOLEAN__OBJECT_UINT (
     void         *invocation_hint G_GNUC_UNUSED,
     void         *marshal_data)
 {
-  typedef gboolean (*_GDbusCodegenMarshalBoolean_ObjectUintFunc)
+  typedef gboolean (*_GDbusCodegenMarshalBoolean_ObjectVariantFunc)
        (void *data1,
         GDBusMethodInvocation *arg_method_invocation,
-        guint arg_a,
+        GVariant *arg_numbers,
         void *data2);
-  _GDbusCodegenMarshalBoolean_ObjectUintFunc callback;
+  _GDbusCodegenMarshalBoolean_ObjectVariantFunc callback;
   GCClosure *cc = (GCClosure*) closure;
   void *data1, *data2;
   gboolean v_return;
@@ -275,13 +275,13 @@ _g_dbus_codegen_marshal_BOOLEAN__OBJECT_UINT (
       data2 = closure->data;
     }
 
-  callback = (_GDbusCodegenMarshalBoolean_ObjectUintFunc)
+  callback = (_GDbusCodegenMarshalBoolean_ObjectVariantFunc)
     (marshal_data ? marshal_data : cc->callback);
 
   v_return =
     callback (data1,
               g_marshal_value_peek_object (param_values + 1),
-              g_marshal_value_peek_uint (param_values + 2),
+              g_marshal_value_peek_variant (param_values + 2),
               data2);
 
   g_value_set_boolean (return_value, v_return);
@@ -392,97 +392,50 @@ static const _ExtendedGDBusMethodInfo _object_test_method_info_hello_world =
   FALSE
 };
 
-static const _ExtendedGDBusArgInfo _object_test_method_info_set_a_IN_ARG_a =
+static const _ExtendedGDBusArgInfo _object_test_method_info_set_numbers_IN_ARG_numbers =
 {
   {
     -1,
-    (gchar *) "a",
-    (gchar *) "u",
+    (gchar *) "numbers",
+    (gchar *) "au",
     NULL
   },
   FALSE
 };
 
-static const GDBusArgInfo * const _object_test_method_info_set_a_IN_ARG_pointers[] =
+static const GDBusArgInfo * const _object_test_method_info_set_numbers_IN_ARG_pointers[] =
 {
-  &_object_test_method_info_set_a_IN_ARG_a.parent_struct,
+  &_object_test_method_info_set_numbers_IN_ARG_numbers.parent_struct,
   NULL
 };
 
-static const _ExtendedGDBusArgInfo _object_test_method_info_set_a_OUT_ARG_received_a =
+static const _ExtendedGDBusArgInfo _object_test_method_info_set_numbers_OUT_ARG_response =
 {
   {
     -1,
-    (gchar *) "received_a",
-    (gchar *) "u",
+    (gchar *) "response",
+    (gchar *) "au",
     NULL
   },
   FALSE
 };
 
-static const GDBusArgInfo * const _object_test_method_info_set_a_OUT_ARG_pointers[] =
+static const GDBusArgInfo * const _object_test_method_info_set_numbers_OUT_ARG_pointers[] =
 {
-  &_object_test_method_info_set_a_OUT_ARG_received_a.parent_struct,
+  &_object_test_method_info_set_numbers_OUT_ARG_response.parent_struct,
   NULL
 };
 
-static const _ExtendedGDBusMethodInfo _object_test_method_info_set_a =
+static const _ExtendedGDBusMethodInfo _object_test_method_info_set_numbers =
 {
   {
     -1,
-    (gchar *) "setA",
-    (GDBusArgInfo **) &_object_test_method_info_set_a_IN_ARG_pointers,
-    (GDBusArgInfo **) &_object_test_method_info_set_a_OUT_ARG_pointers,
+    (gchar *) "setNumbers",
+    (GDBusArgInfo **) &_object_test_method_info_set_numbers_IN_ARG_pointers,
+    (GDBusArgInfo **) &_object_test_method_info_set_numbers_OUT_ARG_pointers,
     NULL
   },
-  "handle-set-a",
-  FALSE
-};
-
-static const _ExtendedGDBusArgInfo _object_test_method_info_set_b_IN_ARG_b =
-{
-  {
-    -1,
-    (gchar *) "b",
-    (gchar *) "u",
-    NULL
-  },
-  FALSE
-};
-
-static const GDBusArgInfo * const _object_test_method_info_set_b_IN_ARG_pointers[] =
-{
-  &_object_test_method_info_set_b_IN_ARG_b.parent_struct,
-  NULL
-};
-
-static const _ExtendedGDBusArgInfo _object_test_method_info_set_b_OUT_ARG_received_b =
-{
-  {
-    -1,
-    (gchar *) "received_b",
-    (gchar *) "u",
-    NULL
-  },
-  FALSE
-};
-
-static const GDBusArgInfo * const _object_test_method_info_set_b_OUT_ARG_pointers[] =
-{
-  &_object_test_method_info_set_b_OUT_ARG_received_b.parent_struct,
-  NULL
-};
-
-static const _ExtendedGDBusMethodInfo _object_test_method_info_set_b =
-{
-  {
-    -1,
-    (gchar *) "setB",
-    (GDBusArgInfo **) &_object_test_method_info_set_b_IN_ARG_pointers,
-    (GDBusArgInfo **) &_object_test_method_info_set_b_OUT_ARG_pointers,
-    NULL
-  },
-  "handle-set-b",
+  "handle-set-numbers",
   FALSE
 };
 
@@ -519,8 +472,7 @@ static const _ExtendedGDBusMethodInfo _object_test_method_info_add =
 static const GDBusMethodInfo * const _object_test_method_info_pointers[] =
 {
   &_object_test_method_info_hello_world.parent_struct,
-  &_object_test_method_info_set_a.parent_struct,
-  &_object_test_method_info_set_b.parent_struct,
+  &_object_test_method_info_set_numbers.parent_struct,
   &_object_test_method_info_add.parent_struct,
   NULL
 };
@@ -583,7 +535,7 @@ object_test_method_marshal_hello_world (
 }
 
 inline static void
-object_test_method_marshal_set_a (
+object_test_method_marshal_set_numbers (
     GClosure     *closure,
     GValue       *return_value,
     unsigned int  n_param_values,
@@ -591,20 +543,7 @@ object_test_method_marshal_set_a (
     void         *invocation_hint,
     void         *marshal_data)
 {
-  _g_dbus_codegen_marshal_BOOLEAN__OBJECT_UINT (closure,
-    return_value, n_param_values, param_values, invocation_hint, marshal_data);
-}
-
-inline static void
-object_test_method_marshal_set_b (
-    GClosure     *closure,
-    GValue       *return_value,
-    unsigned int  n_param_values,
-    const GValue *param_values,
-    void         *invocation_hint,
-    void         *marshal_data)
-{
-  _g_dbus_codegen_marshal_BOOLEAN__OBJECT_UINT (closure,
+  _g_dbus_codegen_marshal_BOOLEAN__OBJECT_VARIANT (closure,
     return_value, n_param_values, param_values, invocation_hint, marshal_data);
 }
 
@@ -633,8 +572,7 @@ object_test_method_marshal_add (
  * @parent_iface: The parent interface.
  * @handle_add: Handler for the #ObjectTest::handle-add signal.
  * @handle_hello_world: Handler for the #ObjectTest::handle-hello-world signal.
- * @handle_set_a: Handler for the #ObjectTest::handle-set-a signal.
- * @handle_set_b: Handler for the #ObjectTest::handle-set-b signal.
+ * @handle_set_numbers: Handler for the #ObjectTest::handle-set-numbers signal.
  *
  * Virtual table for the D-Bus interface <link linkend="gdbus-interface-ti-example-ObjectTest.top_of_page">ti.example.ObjectTest</link>.
  */
@@ -670,50 +608,27 @@ object_test_default_init (ObjectTestIface *iface)
     G_TYPE_DBUS_METHOD_INVOCATION, G_TYPE_STRING);
 
   /**
-   * ObjectTest::handle-set-a:
+   * ObjectTest::handle-set-numbers:
    * @object: A #ObjectTest.
    * @invocation: A #GDBusMethodInvocation.
-   * @arg_a: Argument passed by remote caller.
+   * @arg_numbers: Argument passed by remote caller.
    *
-   * Signal emitted when a remote caller is invoking the <link linkend="gdbus-method-ti-example-ObjectTest.setA">setA()</link> D-Bus method.
+   * Signal emitted when a remote caller is invoking the <link linkend="gdbus-method-ti-example-ObjectTest.setNumbers">setNumbers()</link> D-Bus method.
    *
-   * If a signal handler returns %TRUE, it means the signal handler will handle the invocation (e.g. take a reference to @invocation and eventually call object_test_complete_set_a() or e.g. g_dbus_method_invocation_return_error() on it) and no other signal handlers will run. If no signal handler handles the invocation, the %G_DBUS_ERROR_UNKNOWN_METHOD error is returned.
+   * If a signal handler returns %TRUE, it means the signal handler will handle the invocation (e.g. take a reference to @invocation and eventually call object_test_complete_set_numbers() or e.g. g_dbus_method_invocation_return_error() on it) and no other signal handlers will run. If no signal handler handles the invocation, the %G_DBUS_ERROR_UNKNOWN_METHOD error is returned.
    *
    * Returns: %G_DBUS_METHOD_INVOCATION_HANDLED or %TRUE if the invocation was handled, %G_DBUS_METHOD_INVOCATION_UNHANDLED or %FALSE to let other signal handlers run.
    */
-  g_signal_new ("handle-set-a",
+  g_signal_new ("handle-set-numbers",
     G_TYPE_FROM_INTERFACE (iface),
     G_SIGNAL_RUN_LAST,
-    G_STRUCT_OFFSET (ObjectTestIface, handle_set_a),
+    G_STRUCT_OFFSET (ObjectTestIface, handle_set_numbers),
     g_signal_accumulator_true_handled,
     NULL,
-      object_test_method_marshal_set_a,
+      object_test_method_marshal_set_numbers,
     G_TYPE_BOOLEAN,
     2,
-    G_TYPE_DBUS_METHOD_INVOCATION, G_TYPE_UINT);
-
-  /**
-   * ObjectTest::handle-set-b:
-   * @object: A #ObjectTest.
-   * @invocation: A #GDBusMethodInvocation.
-   * @arg_b: Argument passed by remote caller.
-   *
-   * Signal emitted when a remote caller is invoking the <link linkend="gdbus-method-ti-example-ObjectTest.setB">setB()</link> D-Bus method.
-   *
-   * If a signal handler returns %TRUE, it means the signal handler will handle the invocation (e.g. take a reference to @invocation and eventually call object_test_complete_set_b() or e.g. g_dbus_method_invocation_return_error() on it) and no other signal handlers will run. If no signal handler handles the invocation, the %G_DBUS_ERROR_UNKNOWN_METHOD error is returned.
-   *
-   * Returns: %G_DBUS_METHOD_INVOCATION_HANDLED or %TRUE if the invocation was handled, %G_DBUS_METHOD_INVOCATION_UNHANDLED or %FALSE to let other signal handlers run.
-   */
-  g_signal_new ("handle-set-b",
-    G_TYPE_FROM_INTERFACE (iface),
-    G_SIGNAL_RUN_LAST,
-    G_STRUCT_OFFSET (ObjectTestIface, handle_set_b),
-    g_signal_accumulator_true_handled,
-    NULL,
-      object_test_method_marshal_set_b,
-    G_TYPE_BOOLEAN,
-    2,
-    G_TYPE_DBUS_METHOD_INVOCATION, G_TYPE_UINT);
+    G_TYPE_DBUS_METHOD_INVOCATION, G_TYPE_VARIANT);
 
   /**
    * ObjectTest::handle-add:
@@ -844,31 +759,31 @@ _out:
 }
 
 /**
- * object_test_call_set_a:
+ * object_test_call_set_numbers:
  * @proxy: A #ObjectTestProxy.
- * @arg_a: Argument to pass with the method invocation.
+ * @arg_numbers: Argument to pass with the method invocation.
  * @cancellable: (nullable): A #GCancellable or %NULL.
  * @callback: A #GAsyncReadyCallback to call when the request is satisfied or %NULL.
  * @user_data: User data to pass to @callback.
  *
- * Asynchronously invokes the <link linkend="gdbus-method-ti-example-ObjectTest.setA">setA()</link> D-Bus method on @proxy.
+ * Asynchronously invokes the <link linkend="gdbus-method-ti-example-ObjectTest.setNumbers">setNumbers()</link> D-Bus method on @proxy.
  * When the operation is finished, @callback will be invoked in the thread-default main loop of the thread you are calling this method from (see g_main_context_push_thread_default()).
- * You can then call object_test_call_set_a_finish() to get the result of the operation.
+ * You can then call object_test_call_set_numbers_finish() to get the result of the operation.
  *
- * See object_test_call_set_a_sync() for the synchronous, blocking version of this method.
+ * See object_test_call_set_numbers_sync() for the synchronous, blocking version of this method.
  */
 void
-object_test_call_set_a (
+object_test_call_set_numbers (
     ObjectTest *proxy,
-    guint arg_a,
+    GVariant *arg_numbers,
     GCancellable *cancellable,
     GAsyncReadyCallback callback,
     gpointer user_data)
 {
   g_dbus_proxy_call (G_DBUS_PROXY (proxy),
-    "setA",
-    g_variant_new ("(u)",
-                   arg_a),
+    "setNumbers",
+    g_variant_new ("(@au)",
+                   arg_numbers),
     G_DBUS_CALL_FLAGS_NONE,
     -1,
     cancellable,
@@ -877,20 +792,20 @@ object_test_call_set_a (
 }
 
 /**
- * object_test_call_set_a_finish:
+ * object_test_call_set_numbers_finish:
  * @proxy: A #ObjectTestProxy.
- * @out_received_a: (out) (optional): Return location for return parameter or %NULL to ignore.
- * @res: The #GAsyncResult obtained from the #GAsyncReadyCallback passed to object_test_call_set_a().
+ * @out_response: (out) (optional): Return location for return parameter or %NULL to ignore.
+ * @res: The #GAsyncResult obtained from the #GAsyncReadyCallback passed to object_test_call_set_numbers().
  * @error: Return location for error or %NULL.
  *
- * Finishes an operation started with object_test_call_set_a().
+ * Finishes an operation started with object_test_call_set_numbers().
  *
  * Returns: (skip): %TRUE if the call succeeded, %FALSE if @error is set.
  */
 gboolean
-object_test_call_set_a_finish (
+object_test_call_set_numbers_finish (
     ObjectTest *proxy,
-    guint *out_received_a,
+    GVariant **out_response,
     GAsyncResult *res,
     GError **error)
 {
@@ -899,40 +814,40 @@ object_test_call_set_a_finish (
   if (_ret == NULL)
     goto _out;
   g_variant_get (_ret,
-                 "(u)",
-                 out_received_a);
+                 "(@au)",
+                 out_response);
   g_variant_unref (_ret);
 _out:
   return _ret != NULL;
 }
 
 /**
- * object_test_call_set_a_sync:
+ * object_test_call_set_numbers_sync:
  * @proxy: A #ObjectTestProxy.
- * @arg_a: Argument to pass with the method invocation.
- * @out_received_a: (out) (optional): Return location for return parameter or %NULL to ignore.
+ * @arg_numbers: Argument to pass with the method invocation.
+ * @out_response: (out) (optional): Return location for return parameter or %NULL to ignore.
  * @cancellable: (nullable): A #GCancellable or %NULL.
  * @error: Return location for error or %NULL.
  *
- * Synchronously invokes the <link linkend="gdbus-method-ti-example-ObjectTest.setA">setA()</link> D-Bus method on @proxy. The calling thread is blocked until a reply is received.
+ * Synchronously invokes the <link linkend="gdbus-method-ti-example-ObjectTest.setNumbers">setNumbers()</link> D-Bus method on @proxy. The calling thread is blocked until a reply is received.
  *
- * See object_test_call_set_a() for the asynchronous version of this method.
+ * See object_test_call_set_numbers() for the asynchronous version of this method.
  *
  * Returns: (skip): %TRUE if the call succeeded, %FALSE if @error is set.
  */
 gboolean
-object_test_call_set_a_sync (
+object_test_call_set_numbers_sync (
     ObjectTest *proxy,
-    guint arg_a,
-    guint *out_received_a,
+    GVariant *arg_numbers,
+    GVariant **out_response,
     GCancellable *cancellable,
     GError **error)
 {
   GVariant *_ret;
   _ret = g_dbus_proxy_call_sync (G_DBUS_PROXY (proxy),
-    "setA",
-    g_variant_new ("(u)",
-                   arg_a),
+    "setNumbers",
+    g_variant_new ("(@au)",
+                   arg_numbers),
     G_DBUS_CALL_FLAGS_NONE,
     -1,
     cancellable,
@@ -940,112 +855,8 @@ object_test_call_set_a_sync (
   if (_ret == NULL)
     goto _out;
   g_variant_get (_ret,
-                 "(u)",
-                 out_received_a);
-  g_variant_unref (_ret);
-_out:
-  return _ret != NULL;
-}
-
-/**
- * object_test_call_set_b:
- * @proxy: A #ObjectTestProxy.
- * @arg_b: Argument to pass with the method invocation.
- * @cancellable: (nullable): A #GCancellable or %NULL.
- * @callback: A #GAsyncReadyCallback to call when the request is satisfied or %NULL.
- * @user_data: User data to pass to @callback.
- *
- * Asynchronously invokes the <link linkend="gdbus-method-ti-example-ObjectTest.setB">setB()</link> D-Bus method on @proxy.
- * When the operation is finished, @callback will be invoked in the thread-default main loop of the thread you are calling this method from (see g_main_context_push_thread_default()).
- * You can then call object_test_call_set_b_finish() to get the result of the operation.
- *
- * See object_test_call_set_b_sync() for the synchronous, blocking version of this method.
- */
-void
-object_test_call_set_b (
-    ObjectTest *proxy,
-    guint arg_b,
-    GCancellable *cancellable,
-    GAsyncReadyCallback callback,
-    gpointer user_data)
-{
-  g_dbus_proxy_call (G_DBUS_PROXY (proxy),
-    "setB",
-    g_variant_new ("(u)",
-                   arg_b),
-    G_DBUS_CALL_FLAGS_NONE,
-    -1,
-    cancellable,
-    callback,
-    user_data);
-}
-
-/**
- * object_test_call_set_b_finish:
- * @proxy: A #ObjectTestProxy.
- * @out_received_b: (out) (optional): Return location for return parameter or %NULL to ignore.
- * @res: The #GAsyncResult obtained from the #GAsyncReadyCallback passed to object_test_call_set_b().
- * @error: Return location for error or %NULL.
- *
- * Finishes an operation started with object_test_call_set_b().
- *
- * Returns: (skip): %TRUE if the call succeeded, %FALSE if @error is set.
- */
-gboolean
-object_test_call_set_b_finish (
-    ObjectTest *proxy,
-    guint *out_received_b,
-    GAsyncResult *res,
-    GError **error)
-{
-  GVariant *_ret;
-  _ret = g_dbus_proxy_call_finish (G_DBUS_PROXY (proxy), res, error);
-  if (_ret == NULL)
-    goto _out;
-  g_variant_get (_ret,
-                 "(u)",
-                 out_received_b);
-  g_variant_unref (_ret);
-_out:
-  return _ret != NULL;
-}
-
-/**
- * object_test_call_set_b_sync:
- * @proxy: A #ObjectTestProxy.
- * @arg_b: Argument to pass with the method invocation.
- * @out_received_b: (out) (optional): Return location for return parameter or %NULL to ignore.
- * @cancellable: (nullable): A #GCancellable or %NULL.
- * @error: Return location for error or %NULL.
- *
- * Synchronously invokes the <link linkend="gdbus-method-ti-example-ObjectTest.setB">setB()</link> D-Bus method on @proxy. The calling thread is blocked until a reply is received.
- *
- * See object_test_call_set_b() for the asynchronous version of this method.
- *
- * Returns: (skip): %TRUE if the call succeeded, %FALSE if @error is set.
- */
-gboolean
-object_test_call_set_b_sync (
-    ObjectTest *proxy,
-    guint arg_b,
-    guint *out_received_b,
-    GCancellable *cancellable,
-    GError **error)
-{
-  GVariant *_ret;
-  _ret = g_dbus_proxy_call_sync (G_DBUS_PROXY (proxy),
-    "setB",
-    g_variant_new ("(u)",
-                   arg_b),
-    G_DBUS_CALL_FLAGS_NONE,
-    -1,
-    cancellable,
-    error);
-  if (_ret == NULL)
-    goto _out;
-  g_variant_get (_ret,
-                 "(u)",
-                 out_received_b);
+                 "(@au)",
+                 out_response);
   g_variant_unref (_ret);
 _out:
   return _ret != NULL;
@@ -1171,45 +982,24 @@ object_test_complete_hello_world (
 }
 
 /**
- * object_test_complete_set_a:
+ * object_test_complete_set_numbers:
  * @object: A #ObjectTest.
  * @invocation: (transfer full): A #GDBusMethodInvocation.
- * @received_a: Parameter to return.
+ * @response: Parameter to return.
  *
- * Helper function used in service implementations to finish handling invocations of the <link linkend="gdbus-method-ti-example-ObjectTest.setA">setA()</link> D-Bus method. If you instead want to finish handling an invocation by returning an error, use g_dbus_method_invocation_return_error() or similar.
+ * Helper function used in service implementations to finish handling invocations of the <link linkend="gdbus-method-ti-example-ObjectTest.setNumbers">setNumbers()</link> D-Bus method. If you instead want to finish handling an invocation by returning an error, use g_dbus_method_invocation_return_error() or similar.
  *
  * This method will free @invocation, you cannot use it afterwards.
  */
 void
-object_test_complete_set_a (
+object_test_complete_set_numbers (
     ObjectTest *object G_GNUC_UNUSED,
     GDBusMethodInvocation *invocation,
-    guint received_a)
+    GVariant *response)
 {
   g_dbus_method_invocation_return_value (invocation,
-    g_variant_new ("(u)",
-                   received_a));
-}
-
-/**
- * object_test_complete_set_b:
- * @object: A #ObjectTest.
- * @invocation: (transfer full): A #GDBusMethodInvocation.
- * @received_b: Parameter to return.
- *
- * Helper function used in service implementations to finish handling invocations of the <link linkend="gdbus-method-ti-example-ObjectTest.setB">setB()</link> D-Bus method. If you instead want to finish handling an invocation by returning an error, use g_dbus_method_invocation_return_error() or similar.
- *
- * This method will free @invocation, you cannot use it afterwards.
- */
-void
-object_test_complete_set_b (
-    ObjectTest *object G_GNUC_UNUSED,
-    GDBusMethodInvocation *invocation,
-    guint received_b)
-{
-  g_dbus_method_invocation_return_value (invocation,
-    g_variant_new ("(u)",
-                   received_b));
+    g_variant_new ("(@au)",
+                   response));
 }
 
 /**

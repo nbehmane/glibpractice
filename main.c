@@ -3,8 +3,8 @@
 #include <gio/gio.h>
 #include "objecttest.h"
 
-guint a = 0;
-guint b = 0;
+guint32 a = 0;
+guint32 b = 0;
 
 static gboolean on_handle_add(ObjectTest *interface, 
 		GDBusMethodInvocation *invocation,
@@ -13,37 +13,27 @@ static gboolean on_handle_add(ObjectTest *interface,
 {
 	gchar *response = NULL;
 	response = g_strdup_printf("Output = %d.", a + b);
-	object_test_complete_set_a(interface, invocation, output);
+	object_test_complete_add(interface, invocation, output);
 	g_print("%s\n", response);
 	g_free(response);
 	return TRUE;
 }
 
-static gboolean on_handle_set_b(ObjectTest *interface, 
+static gboolean on_handle_set_numbers(ObjectTest *interface, 
 		GDBusMethodInvocation *invocation,
-		guint received_b,
+		GVariant *numbers,
 		gpointer user_data)
 {
-	gchar *response = NULL;
-	response = g_strdup_printf("Set b = %d.", received_b);
-	object_test_complete_set_a(interface, invocation, received_b);
-	b = received_b;
-	g_print("%s\n", response);
-	g_free(response);
-	return TRUE;
-}
+	gsize n_elements = 0; 
+	gconstpointer elements = g_variant_get_fixed_array(numbers, &n_elements, sizeof(guint32));
 
-static gboolean on_handle_set_a(ObjectTest *interface, 
-		GDBusMethodInvocation *invocation,
-		guint received_a,
-		gpointer user_data)
-{
-	gchar *response = NULL;
-	response = g_strdup_printf("Set a = %d.", received_a);
-	object_test_complete_set_a(interface, invocation, received_a);
-	a = received_a;
-	g_print("%s\n", response);
-	g_free(response);
+	const guint32 *array_numbers = elements;
+
+	a = array_numbers[0];
+	b = array_numbers[1];
+
+	g_print("a: %d | b: %d\n", a, b);
+	object_test_complete_set_numbers(interface, invocation, numbers);
 	return TRUE;
 }
 
@@ -74,13 +64,8 @@ static void on_name_acquired(GDBusConnection *connection,
 			NULL);
 
 	g_signal_connect(interface,
-			"handle-set-a",
-			G_CALLBACK (on_handle_set_a),
-			NULL);
-
-	g_signal_connect(interface,
-			"handle-set-b",
-			G_CALLBACK (on_handle_set_b),
+			"handle-set-numbers",
+			G_CALLBACK (on_handle_set_numbers),
 			NULL);
 
 	g_signal_connect(interface,

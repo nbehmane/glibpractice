@@ -39,15 +39,10 @@ struct _ObjectTestIface
     GDBusMethodInvocation *invocation,
     const gchar *arg_greeting);
 
-  gboolean (*handle_set_a) (
+  gboolean (*handle_set_numbers) (
     ObjectTest *object,
     GDBusMethodInvocation *invocation,
-    guint arg_a);
-
-  gboolean (*handle_set_b) (
-    ObjectTest *object,
-    GDBusMethodInvocation *invocation,
-    guint arg_b);
+    GVariant *arg_numbers);
 
 };
 
@@ -63,15 +58,10 @@ void object_test_complete_hello_world (
     GDBusMethodInvocation *invocation,
     const gchar *response);
 
-void object_test_complete_set_a (
+void object_test_complete_set_numbers (
     ObjectTest *object,
     GDBusMethodInvocation *invocation,
-    guint received_a);
-
-void object_test_complete_set_b (
-    ObjectTest *object,
-    GDBusMethodInvocation *invocation,
-    guint received_b);
+    GVariant *response);
 
 void object_test_complete_add (
     ObjectTest *object,
@@ -101,43 +91,23 @@ gboolean object_test_call_hello_world_sync (
     GCancellable *cancellable,
     GError **error);
 
-void object_test_call_set_a (
+void object_test_call_set_numbers (
     ObjectTest *proxy,
-    guint arg_a,
+    GVariant *arg_numbers,
     GCancellable *cancellable,
     GAsyncReadyCallback callback,
     gpointer user_data);
 
-gboolean object_test_call_set_a_finish (
+gboolean object_test_call_set_numbers_finish (
     ObjectTest *proxy,
-    guint *out_received_a,
+    GVariant **out_response,
     GAsyncResult *res,
     GError **error);
 
-gboolean object_test_call_set_a_sync (
+gboolean object_test_call_set_numbers_sync (
     ObjectTest *proxy,
-    guint arg_a,
-    guint *out_received_a,
-    GCancellable *cancellable,
-    GError **error);
-
-void object_test_call_set_b (
-    ObjectTest *proxy,
-    guint arg_b,
-    GCancellable *cancellable,
-    GAsyncReadyCallback callback,
-    gpointer user_data);
-
-gboolean object_test_call_set_b_finish (
-    ObjectTest *proxy,
-    guint *out_received_b,
-    GAsyncResult *res,
-    GError **error);
-
-gboolean object_test_call_set_b_sync (
-    ObjectTest *proxy,
-    guint arg_b,
-    guint *out_received_b,
+    GVariant *arg_numbers,
+    GVariant **out_response,
     GCancellable *cancellable,
     GError **error);
 

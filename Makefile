@@ -13,8 +13,7 @@ gen:
 
 call:
 	gdbus call -e -d ti.example -o /ti/example/ObjectTest -m ti.example.ObjectTest.HelloWorld nima
-	gdbus call -e -d ti.example -o /ti/example/ObjectTest -m ti.example.ObjectTest.setA 2
-	gdbus call -e -d ti.example -o /ti/example/ObjectTest -m ti.example.ObjectTest.setB 2
+	gdbus call -e -d ti.example -o /ti/example/ObjectTest -m ti.example.ObjectTest.setNumbers [1,2]
 	gdbus call -e -d ti.example -o /ti/example/ObjectTest -m ti.example.ObjectTest.Add
 
 all: $(BIN)
