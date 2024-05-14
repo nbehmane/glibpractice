@@ -11,12 +11,13 @@
 
 #include "app.h"
 
-
 #define VERSION "1.0.0"
 
+/* Globals */
+static GDBusProxy *bluez_adapter_proxy = NULL; // this proxy handle needs to be global
 
 /*
- * @brief XML defintion for function ti.example.AppInfo.xml
+ * @brief XML defintion for interface ti.example.AppInfo.xml
  *
  * <method name="Version">
  * 	<arg name="response" direction="out" type="s"/>
@@ -38,14 +39,25 @@ static gboolean on_handle_version(AppInfo *interface,
 	return TRUE;
 }
 
+/*  
+ * @brief XML definition for interface ti.example.Adapter.xml
+ *  <node>
+ * 	<interface name="ti.example.Adapter">
+ * 		<method name="SetPower">
+ * 			<arg name="power" direction="in" type="u"/>
+ * 		</method>
+ * 	</interface>
+ * </node>
+ */
 static gboolean on_handle_set_power(Adapter *interface, 
 		GDBusMethodInvocation *invocation,
 		guint power,
 		gpointer user_data)
 {
 
+
 	g_print("Adapter: power set to %d\n", power);
-	
+
 	adapter_complete_set_power(interface, invocation);
 	return TRUE;
 }
@@ -120,7 +132,7 @@ static void print_proxy(GDBusProxy *proxy)
 	g_print("Owner: %s\n", name_owner);
 }
 
-extern void app_register_application(GDBusProxy *bluez_adapter_proxy)
+extern void app_register_application()
 {
 	GError *error = NULL;
 

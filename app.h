@@ -6,6 +6,6 @@
 #include "appinfo.h"
 #include "adapter.h"
 
-extern void app_register_application(GDBusProxy *bluez_adapter_proxy);
+extern void app_register_application();
 
 #endif 
