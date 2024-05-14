@@ -12,6 +12,7 @@ gen:
 	@gdbus-codegen --generate-c-code appinfo --interface-prefix ti.example. ti.example.AppInfo.xml
 	@gdbus-codegen --generate-c-code adapter --interface-prefix ti.example. ti.example.Adapter.xml
 
+
 appinfo:
 	gdbus call -e -d ti.example -o /ti/example/AppInfo -m ti.example.AppInfo.Version 
 
@@ -25,6 +26,6 @@ clean:
 	@echo "Cleaning..."
 	@rm *.o *.h.gch out
 	
-$(BIN): $(SRC)
+$(BIN): $(SRC) gen
 	$(CC) $(CPPFLAGS) -c $(HDR) $(SRC)
 	$(CC) $(OBJ) $(LDFLAGS) -o $(BIN)

@@ -88,8 +88,9 @@ static void on_name_acquired(GDBusConnection *connection,
 }
 
 
-/*TEMP FUNC*/
-
+/* Signal handlers for bluez_adapter_project
+ *
+ */
 static void on_signal(GDBusProxy *proxy,
 		gchar *sender_name,
 		gchar *signal_name,
@@ -109,6 +110,9 @@ static void on_properties_changed(GDBusProxy *proxy,
 }
 
 
+/* @brief Prints the app ID to find in D-feet.
+ *
+ */
 static void print_proxy(GDBusProxy *proxy)
 {
 	gchar *name_owner;
