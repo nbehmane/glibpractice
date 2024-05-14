@@ -7,14 +7,9 @@
  *
  *
  */
-
-
 #include "app.h"
 
 #define VERSION "1.0.0"
-
-/* Globals */
-static GDBusProxy *bluez_adapter_proxy = NULL; // this proxy handle needs to be global
 
 /*
  * @brief XML defintion for interface ti.example.AppInfo.xml
@@ -39,28 +34,6 @@ static gboolean on_handle_version(AppInfo *interface,
 	return TRUE;
 }
 
-/*  
- * @brief XML definition for interface ti.example.Adapter.xml
- *  <node>
- * 	<interface name="ti.example.Adapter">
- * 		<method name="SetPower">
- * 			<arg name="power" direction="in" type="u"/>
- * 		</method>
- * 	</interface>
- * </node>
- */
-static gboolean on_handle_set_power(Adapter *interface, 
-		GDBusMethodInvocation *invocation,
-		guint power,
-		gpointer user_data)
-{
-
-
-	g_print("Adapter: power set to %d\n", power);
-
-	adapter_complete_set_power(interface, invocation);
-	return TRUE;
-}
 
 
 static void on_name_acquired(GDBusConnection *connection, 
@@ -68,7 +41,6 @@ static void on_name_acquired(GDBusConnection *connection,
 		gpointer user_data)
 {
 	AppInfo *app_interface = NULL;
-	Adapter *adapter_interface = NULL;
 
 	GError *error = NULL;
 
@@ -84,58 +56,14 @@ static void on_name_acquired(GDBusConnection *connection,
 			connection, 
 			"/ti/example/AppInfo",
 			&error);
+	
+	bluez_adapter_proxy_setup(connection);
 
-	/* Setting up bluez adapter interface */
-	adapter_interface = adapter_skeleton_new();
-
-	g_signal_connect(adapter_interface,
-			"handle-set-power",
-			G_CALLBACK (on_handle_set_power),
-			NULL);
-
-	g_dbus_interface_skeleton_export(G_DBUS_INTERFACE_SKELETON (adapter_interface), 
-			connection, 
-			"/ti/example/Adapter",
-			&error);
 }
 
-
-/* Signal handlers for bluez_adapter_project
- *
- */
-static void on_signal(GDBusProxy *proxy,
-		gchar *sender_name,
-		gchar *signal_name,
-		GVariant *parameters,
-		gpointer user_data)
-{
-	g_print("Adapter: Signal\n");
-}
-
-
-static void on_properties_changed(GDBusProxy *proxy,
-				GVariant *changed_properties,
-				const gchar* const *invalidated_properties,
-				gpointer user_data)
-{
-	g_print("Adapter: Properties Changed\n");
-}
-
-
-/* @brief Prints the app ID to find in D-feet.
- *
- */
-static void print_proxy(GDBusProxy *proxy)
-{
-	gchar *name_owner;
-	name_owner = g_dbus_proxy_get_name_owner(proxy);
-	g_print("Owner: %s\n", name_owner);
-}
 
 extern void app_register_application()
 {
-	GError *error = NULL;
-
 	// This is the MAIN application session.
 	g_bus_own_name(G_BUS_TYPE_SESSION,
 			"ti.example",
@@ -146,42 +74,5 @@ extern void app_register_application()
 			NULL,
 			NULL);
 
-	/* BLUEZ */
-	// This is the BlueZ object we can call methods on
-	// Notice that this for the adapter object.
-	bluez_adapter_proxy = g_dbus_proxy_new_for_bus_sync(G_BUS_TYPE_SYSTEM,
-			G_DBUS_PROXY_FLAGS_NONE,
-			NULL,
-			"org.bluez",
-			"/org/bluez/hci0",
-			"org.bluez.Adapter1",
-			NULL,
-			&error);	
-	
-	if (bluez_adapter_proxy == NULL)
-	{
-		g_printerr("Error in creating proxy: %s\n", error->message);
-		g_error_free(error);
-		goto out;
-	}
-
-	g_signal_connect(bluez_adapter_proxy,
-			"g-properties-changed",
-			G_CALLBACK (on_properties_changed),
-			NULL);
-
-	g_signal_connect(bluez_adapter_proxy,
-			"g-signal",
-			G_CALLBACK(on_signal),
-			NULL);
-
-
-	print_proxy(bluez_adapter_proxy);
-
-	return;
-
-out:
-	if (bluez_adapter_proxy != NULL)
-		g_object_unref(bluez_adapter_proxy);
 }
 
