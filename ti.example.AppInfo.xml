@@ -1,0 +1,8 @@
+<node>
+	<interface name="ti.example.AppInfo">
+		<method name="Version">
+			<arg name="version" direction="out" type="s"/>
+			<arg name="description" direction="out" type="s"/>
+		</method>
+	</interface>
+</node>

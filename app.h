@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <gio/gio.h>
-#include "objecttest.h"
+#include "appinfo.h"
 
 extern void app_register_application();
 

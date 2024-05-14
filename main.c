@@ -1,7 +1,6 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <gio/gio.h>
-#include "objecttest.h"
 #include "app.h"
 
 
