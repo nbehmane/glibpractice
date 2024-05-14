@@ -10,9 +10,14 @@ BIN=out
 
 gen:
 	@gdbus-codegen --generate-c-code appinfo --interface-prefix ti.example. ti.example.AppInfo.xml
+	@gdbus-codegen --generate-c-code adapter --interface-prefix ti.example. ti.example.Adapter.xml
 
-call:
+appinfo:
 	gdbus call -e -d ti.example -o /ti/example/AppInfo -m ti.example.AppInfo.Version 
+
+adapter:
+	gdbus call -e -d ti.example -o /ti/example/Adapter -m ti.example.Adapter.SetPower 0 
+	gdbus call -e -d ti.example -o /ti/example/Adapter -m ti.example.Adapter.SetPower 1 
 
 all: $(BIN)
 

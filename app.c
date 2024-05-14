@@ -16,7 +16,7 @@
 
 
 /*
- * @brief XML defintion for function
+ * @brief XML defintion for function ti.example.AppInfo.xml
  *
  * <method name="Version">
  * 	<arg name="response" direction="out" type="s"/>
@@ -29,16 +29,24 @@ static gboolean on_handle_version(AppInfo *interface,
 		gpointer user_data)
 {
 	version = VERSION;
-	description = "Skeleton App - Architecture example for creating new applications.";
+	description = "BlueZ Skeleton App - Architecture example for creating new applications.";
 
 	g_print("%s\n", version);
 	g_print("%s\n", description);
-
-
-
-
 	
 	app_info_complete_version(interface, invocation, version, description);
+	return TRUE;
+}
+
+static gboolean on_handle_set_power(Adapter *interface, 
+		GDBusMethodInvocation *invocation,
+		guint power,
+		gpointer user_data)
+{
+
+	g_print("Adapter: power set to %d\n", power);
+	
+	adapter_complete_set_power(interface, invocation);
 	return TRUE;
 }
 
@@ -47,18 +55,35 @@ static void on_name_acquired(GDBusConnection *connection,
 		const gchar *name, 
 		gpointer user_data)
 {
-	AppInfo *interface = NULL;
+	AppInfo *app_interface = NULL;
+	Adapter *adapter_interface = NULL;
+
 	GError *error = NULL;
 
-	interface = app_info_skeleton_new();
-	g_signal_connect(interface,
+	/* Setting up AppInfo interface */
+	app_interface = app_info_skeleton_new();
+
+	g_signal_connect(app_interface,
 			"handle-version",
 			G_CALLBACK (on_handle_version),
 			NULL);
 
-	g_dbus_interface_skeleton_export(G_DBUS_INTERFACE_SKELETON (interface), 
+	g_dbus_interface_skeleton_export(G_DBUS_INTERFACE_SKELETON (app_interface), 
 			connection, 
 			"/ti/example/AppInfo",
+			&error);
+
+	/* Setting up bluez adapter interface */
+	adapter_interface = adapter_skeleton_new();
+
+	g_signal_connect(adapter_interface,
+			"handle-set-power",
+			G_CALLBACK (on_handle_set_power),
+			NULL);
+
+	g_dbus_interface_skeleton_export(G_DBUS_INTERFACE_SKELETON (adapter_interface), 
+			connection, 
+			"/ti/example/Adapter",
 			&error);
 }
 
@@ -89,14 +114,6 @@ static void print_proxy(GDBusProxy *proxy)
 	gchar *name_owner;
 	name_owner = g_dbus_proxy_get_name_owner(proxy);
 	g_print("Owner: %s\n", name_owner);
-}
-
-static void on_name_owner_notify(GObject *object,
-		GParamSpec *pspec,
-		gpointer user_data)
-{
-	GDBusProxy *proxy = G_DBUS_PROXY(object);
-	print_proxy(proxy);
 }
 
 extern void app_register_application(GDBusProxy *bluez_adapter_proxy)
@@ -133,14 +150,10 @@ extern void app_register_application(GDBusProxy *bluez_adapter_proxy)
 	}
 
 	g_signal_connect(bluez_adapter_proxy,
-			"notify::g-name-owner",
-			G_CALLBACK (on_name_owner_notify),
-			NULL);
-
-	g_signal_connect(bluez_adapter_proxy,
 			"g-properties-changed",
 			G_CALLBACK (on_properties_changed),
 			NULL);
+
 	g_signal_connect(bluez_adapter_proxy,
 			"g-signal",
 			G_CALLBACK(on_signal),
