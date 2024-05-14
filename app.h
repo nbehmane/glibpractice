@@ -5,6 +5,6 @@
 #include <gio/gio.h>
 #include "appinfo.h"
 
-extern void app_register_application();
+extern void app_register_application(GDBusProxy *bluez_adapter_proxy);
 
 #endif 
