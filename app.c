@@ -58,6 +58,7 @@ static void on_name_acquired(GDBusConnection *connection,
 			&error);
 	
 	bluez_adapter_proxy_init(connection);
+	bluez_object_proxy_init(connection);
 
 }
 

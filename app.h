@@ -5,6 +5,7 @@
 #include <gio/gio.h>
 #include "./gen/application.h"
 #include "bluez_adapter.h"
+#include "bluez_object.h"
 
 extern void app_register_application();
 
