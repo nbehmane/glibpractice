@@ -1,7 +1,12 @@
 #include "bluez_adapter.h"
+#include "dbushelper.h"
 
-/* Globals */
-static GDBusProxy *bluez_adapter_proxy = NULL; // this proxy handle needs to be global
+static void on_adapter_properties_changed(GDBusProxy *proxy, GVariant *changed_properties, const gchar* const *invalidated_properties, gpointer user_data);
+static gboolean on_handle_set_power(Adapter *interface, GDBusMethodInvocation *invocation, guint power, gpointer user_data);
+static void on_adapter_properties_changed(GDBusProxy *proxy, GVariant *changed_properties, const gchar* const *invalidated_properties, gpointer user_data);
+static void on_adapter_signal(GDBusProxy *proxy, gchar *sender_name, gchar *signal_name, GVariant *parameters, gpointer user_data);
+
+static GDBusProxy *bluez_adapter_proxy = NULL;
 
 /*  
  * @brief XML definition for interface ti.example.Adapter.xml
@@ -25,41 +30,10 @@ static gboolean on_handle_set_power(Adapter *interface,
 }
 
 
-/**** SIGNAL HANDLERS START ****/
-static void on_signal(GDBusProxy *proxy,
-		gchar *sender_name,
-		gchar *signal_name,
-		GVariant *parameters,
-		gpointer user_data)
-{
-	g_print("Adapter: Signal\n");
-}
-
-
-static void on_properties_changed(GDBusProxy *proxy,
-				GVariant *changed_properties,
-				const gchar* const *invalidated_properties,
-				gpointer user_data)
-{
-	g_print("Adapter: Properties Changed\n");
-}
-/**** SIGNAL HANDLERS END ****/
-
-
-/* @brief Prints the app ID to find in D-feet.
- *
- */
-static void print_proxy(GDBusProxy *proxy)
-{
-	gchar *name_owner;
-	name_owner = g_dbus_proxy_get_name_owner(proxy);
-	g_print("Owner: %s\n", name_owner);
-}
-
 /**
- * To be placed in on_name_aquired by main app
- *
- *
+ * Function sets up the org.bluez.Adapter1 object for our Adapter wrapper. 
+ * 
+ * You use this proxy: bluez_adapter_proxy to call methods
  *
  */
 extern void bluez_adapter_proxy_setup(GDBusConnection *connection)
@@ -100,12 +74,12 @@ extern void bluez_adapter_proxy_setup(GDBusConnection *connection)
 	/**** SIGNAL CONNECTS START ****/
 	g_signal_connect(bluez_adapter_proxy,
 			"g-properties-changed",
-			G_CALLBACK (on_properties_changed),
+			G_CALLBACK (on_adapter_properties_changed),
 			NULL);
 
 	g_signal_connect(bluez_adapter_proxy,
 			"g-signal",
-			G_CALLBACK(on_signal),
+			G_CALLBACK(on_adapter_signal),
 			NULL);
 	/**** SIGNAL CONNECTS END ****/
 
@@ -120,3 +94,24 @@ out:
 		g_object_unref(bluez_adapter_proxy);
 }
 
+
+
+/**** SIGNAL HANDLERS START ****/
+static void on_adapter_signal(GDBusProxy *proxy,
+		gchar *sender_name,
+		gchar *signal_name,
+		GVariant *parameters,
+		gpointer user_data)
+{
+	g_print("Adapter: Signal\n");
+}
+
+
+static void on_adapter_properties_changed(GDBusProxy *proxy,
+				GVariant *changed_properties,
+				const gchar* const *invalidated_properties,
+				gpointer user_data)
+{
+	g_print("Adapter: Properties Changed\n");
+}
+/**** SIGNAL HANDLERS END ****/

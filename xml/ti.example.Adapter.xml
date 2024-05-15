@@ -1,7 +1,7 @@
 <node>
 	<interface name="ti.example.Adapter">
 		<method name="SetPower">
-			<arg name="power" direction="in" type="u"/>
+			<arg name="power" direction="in" type="u" />
 		</method>
 	</interface>
 </node>
