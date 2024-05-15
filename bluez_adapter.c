@@ -1,60 +1,43 @@
 #include "bluez_adapter.h"
 #include "dbushelper.h"
 
-static void on_adapter_properties_changed(GDBusProxy *proxy, GVariant *changed_properties, const gchar* const *invalidated_properties, gpointer user_data);
-static gboolean on_handle_set_power(Adapter *interface, GDBusMethodInvocation *invocation, guint power, gpointer user_data);
+// Signal Callbacks
 static void on_adapter_properties_changed(GDBusProxy *proxy, GVariant *changed_properties, const gchar* const *invalidated_properties, gpointer user_data);
 static void on_adapter_signal(GDBusProxy *proxy, gchar *sender_name, gchar *signal_name, GVariant *parameters, gpointer user_data);
 
+// Method Calls
+extern void bluez_adapter_scan(guint time);
+
+// Proxy handle
 static GDBusProxy *bluez_adapter_proxy = NULL;
 
-/*  
- * @brief XML definition for interface ti.example.Adapter.xml
- *  <node>
- * 	<interface name="ti.example.Adapter">
- * 		<method name="SetPower">
- * 			<arg name="power" direction="in" type="u"/>
- * 		</method>
- * 	</interface>
- * </node>
- */
-static gboolean on_handle_set_power(Adapter *interface, 
-		GDBusMethodInvocation *invocation,
-		guint power,
-		gpointer user_data)
+extern void bluez_adapter_scan(guint time)
 {
-	g_print("Adapter: power set to %d\n", power);
+	GError *error = NULL;
 
-	adapter_complete_set_power(interface, invocation);
-	return TRUE;
+	g_dbus_proxy_call_sync( bluez_adapter_proxy,
+			"StartDiscovery",
+			g_variant_new("()", NULL),
+			G_DBUS_CALL_FLAGS_NONE,
+			-1,
+			NULL,
+			&error);
+
+	print_error(error);
+
 }
 
 
 /**
  * Function sets up the org.bluez.Adapter1 object for our Adapter wrapper. 
  * 
- * You use this proxy: bluez_adapter_proxy to call methods
  *
  */
-extern void bluez_adapter_proxy_setup(GDBusConnection *connection)
+extern void bluez_adapter_proxy_init(GDBusConnection *connection)
 {
-	Adapter *adapter_interface = NULL;
 	GError *error = NULL;
-
-	/* Setting up bluez adapter interface ti.example.Adapter */
-	adapter_interface = adapter_skeleton_new();
-
-	g_signal_connect(adapter_interface,
-			"handle-set-power",
-			G_CALLBACK (on_handle_set_power),
-			NULL);
-
-	g_dbus_interface_skeleton_export(G_DBUS_INTERFACE_SKELETON (adapter_interface), 
-			connection, 
-			"/ti/example/Adapter",
-			&error);
-
 	// Adapter interface proxy.
+	// This will allow us to call methods via the proxy.
 	bluez_adapter_proxy = g_dbus_proxy_new_for_bus_sync(G_BUS_TYPE_SYSTEM,
 			G_DBUS_PROXY_FLAGS_NONE,
 			NULL,
@@ -66,12 +49,10 @@ extern void bluez_adapter_proxy_setup(GDBusConnection *connection)
 	
 	if (bluez_adapter_proxy == NULL)
 	{
-		g_printerr("Error in creating proxy: %s\n", error->message);
-		g_error_free(error);
+		print_error(error);
 		goto out;
 	}
 
-	/**** SIGNAL CONNECTS START ****/
 	g_signal_connect(bluez_adapter_proxy,
 			"g-properties-changed",
 			G_CALLBACK (on_adapter_properties_changed),
@@ -81,7 +62,6 @@ extern void bluez_adapter_proxy_setup(GDBusConnection *connection)
 			"g-signal",
 			G_CALLBACK(on_adapter_signal),
 			NULL);
-	/**** SIGNAL CONNECTS END ****/
 
 
 	// Print the owner ID of the proxy object.

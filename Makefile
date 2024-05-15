@@ -12,17 +12,12 @@ BIN=out
 
 gen:
 	@mkdir gen
-	@gdbus-codegen --generate-c-code appinfo --interface-prefix ti.example. ./xml/ti.example.AppInfo.xml
-	@gdbus-codegen --generate-c-code adapter --interface-prefix ti.example. ./xml/ti.example.Adapter.xml
-	@mv appinfo* adapter* ./gen
+	@gdbus-codegen --generate-c-code application --interface-prefix ti.example. ./xml/ti.example.Application.xml
+	@mv application* ./gen
 
 
-appinfo:
-	gdbus call -e -d ti.example -o /ti/example/AppInfo -m ti.example.AppInfo.Version 
-
-adapter:
-	gdbus call -e -d ti.example -o /ti/example/Adapter -m ti.example.Adapter.SetPower 0 
-	gdbus call -e -d ti.example -o /ti/example/Adapter -m ti.example.Adapter.SetPower 1 
+app:
+	gdbus call -e -d ti.example -o /ti/example/Application -m ti.example.App.Scan 1 
 
 all: $(BIN)
 

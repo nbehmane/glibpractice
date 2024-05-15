@@ -10,6 +10,7 @@
  *
  */
 void print_proxy(GDBusProxy *proxy);
+void print_error(GError *error);
 
 
 #endif

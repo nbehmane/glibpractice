@@ -10,7 +10,7 @@
 #  include "config.h"
 #endif
 
-#include "appinfo.h"
+#include "application.h"
 
 #include <string.h>
 #ifdef G_OS_UNIX
@@ -152,107 +152,95 @@ _g_value_equal (const GValue *a, const GValue *b)
 }
 
 /* ------------------------------------------------------------------------
- * Code for interface ti.example.AppInfo
+ * Code for interface ti.example.App
  * ------------------------------------------------------------------------
  */
 
 /**
- * SECTION:AppInfo
- * @title: AppInfo
- * @short_description: Generated C code for the ti.example.AppInfo D-Bus interface
+ * SECTION:App
+ * @title: App
+ * @short_description: Generated C code for the ti.example.App D-Bus interface
  *
- * This section contains code for working with the <link linkend="gdbus-interface-ti-example-AppInfo.top_of_page">ti.example.AppInfo</link> D-Bus interface in C.
+ * This section contains code for working with the <link linkend="gdbus-interface-ti-example-App.top_of_page">ti.example.App</link> D-Bus interface in C.
  */
 
-/* ---- Introspection data for ti.example.AppInfo ---- */
+/* ---- Introspection data for ti.example.App ---- */
 
-static const _ExtendedGDBusArgInfo _app_info_method_info_version_OUT_ARG_version =
+static const _ExtendedGDBusArgInfo _app_method_info_scan_IN_ARG_time =
 {
   {
     -1,
-    (gchar *) "version",
-    (gchar *) "s",
+    (gchar *) "time",
+    (gchar *) "u",
     NULL
   },
   FALSE
 };
 
-static const _ExtendedGDBusArgInfo _app_info_method_info_version_OUT_ARG_description =
+static const GDBusArgInfo * const _app_method_info_scan_IN_ARG_pointers[] =
 {
-  {
-    -1,
-    (gchar *) "description",
-    (gchar *) "s",
-    NULL
-  },
-  FALSE
-};
-
-static const GDBusArgInfo * const _app_info_method_info_version_OUT_ARG_pointers[] =
-{
-  &_app_info_method_info_version_OUT_ARG_version.parent_struct,
-  &_app_info_method_info_version_OUT_ARG_description.parent_struct,
+  &_app_method_info_scan_IN_ARG_time.parent_struct,
   NULL
 };
 
-static const _ExtendedGDBusMethodInfo _app_info_method_info_version =
+static const _ExtendedGDBusMethodInfo _app_method_info_scan =
 {
   {
     -1,
-    (gchar *) "Version",
+    (gchar *) "Scan",
+    (GDBusArgInfo **) &_app_method_info_scan_IN_ARG_pointers,
     NULL,
-    (GDBusArgInfo **) &_app_info_method_info_version_OUT_ARG_pointers,
     NULL
   },
-  "handle-version",
+  "handle-scan",
   FALSE
 };
 
-static const GDBusMethodInfo * const _app_info_method_info_pointers[] =
+static const GDBusMethodInfo * const _app_method_info_pointers[] =
 {
-  &_app_info_method_info_version.parent_struct,
+  &_app_method_info_scan.parent_struct,
   NULL
 };
 
-static const _ExtendedGDBusInterfaceInfo _app_info_interface_info =
+static const _ExtendedGDBusInterfaceInfo _app_interface_info =
 {
   {
     -1,
-    (gchar *) "ti.example.AppInfo",
-    (GDBusMethodInfo **) &_app_info_method_info_pointers,
+    (gchar *) "ti.example.App",
+    (GDBusMethodInfo **) &_app_method_info_pointers,
     NULL,
     NULL,
     NULL
   },
-  "app-info",
+  "app",
 };
 
 
 /**
- * app_info_interface_info:
+ * app_interface_info:
  *
- * Gets a machine-readable description of the <link linkend="gdbus-interface-ti-example-AppInfo.top_of_page">ti.example.AppInfo</link> D-Bus interface.
+ * Gets a machine-readable description of the <link linkend="gdbus-interface-ti-example-App.top_of_page">ti.example.App</link> D-Bus interface.
  *
  * Returns: (transfer none): A #GDBusInterfaceInfo. Do not free.
  */
 GDBusInterfaceInfo *
-app_info_interface_info (void)
+app_interface_info (void)
 {
-  return (GDBusInterfaceInfo *) &_app_info_interface_info.parent_struct;
+  return (GDBusInterfaceInfo *) &_app_interface_info.parent_struct;
 }
 
 /**
- * app_info_override_properties:
+ * app_override_properties:
  * @klass: The class structure for a #GObject derived class.
  * @property_id_begin: The property id to assign to the first overridden property.
  *
- * Overrides all #GObject properties in the #AppInfo interface for a concrete class.
+ * Overrides all #GObject properties in the #App interface for a concrete class.
  * The properties are overridden in the order they are defined.
  *
  * Returns: The last property id.
  */
 guint
-app_info_override_properties (GObjectClass *klass G_GNUC_UNUSED, guint property_id_begin)
+app_override_properties (GObjectClass *klass G_GNUC_UNUSED, guint property_id_begin)
 {
   return property_id_begin - 1;
 }
@@ -260,73 +248,77 @@ app_info_override_properties (GObjectClass *klass G_GNUC_UNUSED, guint property_
 
 
 /**
- * AppInfo:
+ * App:
  *
- * Abstract interface type for the D-Bus interface <link linkend="gdbus-interface-ti-example-AppInfo.top_of_page">ti.example.AppInfo</link>.
+ * Abstract interface type for the D-Bus interface <link linkend="gdbus-interface-ti-example-App.top_of_page">ti.example.App</link>.
  */
 
 /**
- * AppInfoIface:
+ * AppIface:
  * @parent_iface: The parent interface.
- * @handle_version: Handler for the #AppInfo::handle-version signal.
+ * @handle_scan: Handler for the #App::handle-scan signal.
  *
- * Virtual table for the D-Bus interface <link linkend="gdbus-interface-ti-example-AppInfo.top_of_page">ti.example.AppInfo</link>.
+ * Virtual table for the D-Bus interface <link linkend="gdbus-interface-ti-example-App.top_of_page">ti.example.App</link>.
  */
 
-typedef AppInfoIface AppInfoInterface;
-G_DEFINE_INTERFACE (AppInfo, app_info, G_TYPE_OBJECT)
+typedef AppIface AppInterface;
+G_DEFINE_INTERFACE (App, app, G_TYPE_OBJECT)
 
 static void
-app_info_default_init (AppInfoIface *iface)
+app_default_init (AppIface *iface)
 {
   /* GObject signals for incoming D-Bus method calls: */
   /**
-   * AppInfo::handle-version:
-   * @object: A #AppInfo.
+   * App::handle-scan:
+   * @object: A #App.
    * @invocation: A #GDBusMethodInvocation.
+   * @arg_time: Argument passed by remote caller.
    *
-   * Signal emitted when a remote caller is invoking the <link linkend="gdbus-method-ti-example-AppInfo.Version">Version()</link> D-Bus method.
+   * Signal emitted when a remote caller is invoking the <link linkend="gdbus-method-ti-example-App.Scan">Scan()</link> D-Bus method.
    *
-   * If a signal handler returns %TRUE, it means the signal handler will handle the invocation (e.g. take a reference to @invocation and eventually call app_info_complete_version() or e.g. g_dbus_method_invocation_return_error() on it) and no other signal handlers will run. If no signal handler handles the invocation, the %G_DBUS_ERROR_UNKNOWN_METHOD error is returned.
+   * If a signal handler returns %TRUE, it means the signal handler will handle the invocation (e.g. take a reference to @invocation and eventually call app_complete_scan() or e.g. g_dbus_method_invocation_return_error() on it) and no other signal handlers will run. If no signal handler handles the invocation, the %G_DBUS_ERROR_UNKNOWN_METHOD error is returned.
    *
    * Returns: %G_DBUS_METHOD_INVOCATION_HANDLED or %TRUE if the invocation was handled, %G_DBUS_METHOD_INVOCATION_UNHANDLED or %FALSE to let other signal handlers run.
    */
-  g_signal_new ("handle-version",
+  g_signal_new ("handle-scan",
     G_TYPE_FROM_INTERFACE (iface),
     G_SIGNAL_RUN_LAST,
-    G_STRUCT_OFFSET (AppInfoIface, handle_version),
+    G_STRUCT_OFFSET (AppIface, handle_scan),
     g_signal_accumulator_true_handled,
     NULL,
     g_cclosure_marshal_generic,
     G_TYPE_BOOLEAN,
-    1,
-    G_TYPE_DBUS_METHOD_INVOCATION);
+    2,
+    G_TYPE_DBUS_METHOD_INVOCATION, G_TYPE_UINT);
 
 }
 
 /**
- * app_info_call_version:
- * @proxy: A #AppInfoProxy.
+ * app_call_scan:
+ * @proxy: A #AppProxy.
+ * @arg_time: Argument to pass with the method invocation.
  * @cancellable: (nullable): A #GCancellable or %NULL.
  * @callback: A #GAsyncReadyCallback to call when the request is satisfied or %NULL.
  * @user_data: User data to pass to @callback.
  *
- * Asynchronously invokes the <link linkend="gdbus-method-ti-example-AppInfo.Version">Version()</link> D-Bus method on @proxy.
+ * Asynchronously invokes the <link linkend="gdbus-method-ti-example-App.Scan">Scan()</link> D-Bus method on @proxy.
  * When the operation is finished, @callback will be invoked in the thread-default main loop of the thread you are calling this method from (see g_main_context_push_thread_default()).
- * You can then call app_info_call_version_finish() to get the result of the operation.
+ * You can then call app_call_scan_finish() to get the result of the operation.
  *
- * See app_info_call_version_sync() for the synchronous, blocking version of this method.
+ * See app_call_scan_sync() for the synchronous, blocking version of this method.
  */
 void
-app_info_call_version (
-    AppInfo *proxy,
+app_call_scan (
+    App *proxy,
+    guint arg_time,
     GCancellable *cancellable,
     GAsyncReadyCallback callback,
     gpointer user_data)
 {
   g_dbus_proxy_call (G_DBUS_PROXY (proxy),
-    "Version",
-    g_variant_new ("()"),
+    "Scan",
+    g_variant_new ("(u)",
+                   arg_time),
     G_DBUS_CALL_FLAGS_NONE,
     -1,
     cancellable,
@@ -335,22 +327,18 @@ app_info_call_version (
 }
 
 /**
- * app_info_call_version_finish:
- * @proxy: A #AppInfoProxy.
- * @out_version: (out) (optional): Return location for return parameter or %NULL to ignore.
- * @out_description: (out) (optional): Return location for return parameter or %NULL to ignore.
- * @res: The #GAsyncResult obtained from the #GAsyncReadyCallback passed to app_info_call_version().
+ * app_call_scan_finish:
+ * @proxy: A #AppProxy.
+ * @res: The #GAsyncResult obtained from the #GAsyncReadyCallback passed to app_call_scan().
  * @error: Return location for error or %NULL.
  *
- * Finishes an operation started with app_info_call_version().
+ * Finishes an operation started with app_call_scan().
  *
  * Returns: (skip): %TRUE if the call succeeded, %FALSE if @error is set.
  */
 gboolean
-app_info_call_version_finish (
-    AppInfo *proxy,
-    gchar **out_version,
-    gchar **out_description,
+app_call_scan_finish (
+    App *proxy,
     GAsyncResult *res,
     GError **error)
 {
@@ -359,40 +347,37 @@ app_info_call_version_finish (
   if (_ret == NULL)
     goto _out;
   g_variant_get (_ret,
-                 "(ss)",
-                 out_version,
-                 out_description);
+                 "()");
   g_variant_unref (_ret);
 _out:
   return _ret != NULL;
 }
 
 /**
- * app_info_call_version_sync:
- * @proxy: A #AppInfoProxy.
- * @out_version: (out) (optional): Return location for return parameter or %NULL to ignore.
- * @out_description: (out) (optional): Return location for return parameter or %NULL to ignore.
+ * app_call_scan_sync:
+ * @proxy: A #AppProxy.
+ * @arg_time: Argument to pass with the method invocation.
  * @cancellable: (nullable): A #GCancellable or %NULL.
  * @error: Return location for error or %NULL.
  *
- * Synchronously invokes the <link linkend="gdbus-method-ti-example-AppInfo.Version">Version()</link> D-Bus method on @proxy. The calling thread is blocked until a reply is received.
+ * Synchronously invokes the <link linkend="gdbus-method-ti-example-App.Scan">Scan()</link> D-Bus method on @proxy. The calling thread is blocked until a reply is received.
  *
- * See app_info_call_version() for the asynchronous version of this method.
+ * See app_call_scan() for the asynchronous version of this method.
  *
  * Returns: (skip): %TRUE if the call succeeded, %FALSE if @error is set.
  */
 gboolean
-app_info_call_version_sync (
-    AppInfo *proxy,
-    gchar **out_version,
-    gchar **out_description,
+app_call_scan_sync (
+    App *proxy,
+    guint arg_time,
     GCancellable *cancellable,
     GError **error)
 {
   GVariant *_ret;
   _ret = g_dbus_proxy_call_sync (G_DBUS_PROXY (proxy),
-    "Version",
-    g_variant_new ("()"),
+    "Scan",
+    g_variant_new ("(u)",
+                   arg_time),
     G_DBUS_CALL_FLAGS_NONE,
     -1,
     cancellable,
@@ -400,80 +385,72 @@ app_info_call_version_sync (
   if (_ret == NULL)
     goto _out;
   g_variant_get (_ret,
-                 "(ss)",
-                 out_version,
-                 out_description);
+                 "()");
   g_variant_unref (_ret);
 _out:
   return _ret != NULL;
 }
 
 /**
- * app_info_complete_version:
- * @object: A #AppInfo.
+ * app_complete_scan:
+ * @object: A #App.
  * @invocation: (transfer full): A #GDBusMethodInvocation.
- * @version: Parameter to return.
- * @description: Parameter to return.
  *
- * Helper function used in service implementations to finish handling invocations of the <link linkend="gdbus-method-ti-example-AppInfo.Version">Version()</link> D-Bus method. If you instead want to finish handling an invocation by returning an error, use g_dbus_method_invocation_return_error() or similar.
+ * Helper function used in service implementations to finish handling invocations of the <link linkend="gdbus-method-ti-example-App.Scan">Scan()</link> D-Bus method. If you instead want to finish handling an invocation by returning an error, use g_dbus_method_invocation_return_error() or similar.
  *
  * This method will free @invocation, you cannot use it afterwards.
  */
 void
-app_info_complete_version (
-    AppInfo *object G_GNUC_UNUSED,
-    GDBusMethodInvocation *invocation,
-    const gchar *version,
-    const gchar *description)
+app_complete_scan (
+    App *object G_GNUC_UNUSED,
+    GDBusMethodInvocation *invocation)
 {
   g_dbus_method_invocation_return_value (invocation,
-    g_variant_new ("(ss)",
-                   version,
-                   description));
+    g_variant_new ("()"));
 }
 
 /* ------------------------------------------------------------------------ */
 
 /**
- * AppInfoProxy:
+ * AppProxy:
  *
- * The #AppInfoProxy structure contains only private data and should only be accessed using the provided API.
+ * The #AppProxy structure contains only private data and should only be accessed using the provided API.
  */
 
 /**
- * AppInfoProxyClass:
+ * AppProxyClass:
  * @parent_class: The parent class.
  *
- * Class structure for #AppInfoProxy.
+ * Class structure for #AppProxy.
  */
 
-struct _AppInfoProxyPrivate
+struct _AppProxyPrivate
 {
   GData *qdata;
 };
 
-static void app_info_proxy_iface_init (AppInfoIface *iface);
+static void app_proxy_iface_init (AppIface *iface);
 
 #if GLIB_VERSION_MAX_ALLOWED >= GLIB_VERSION_2_38
-G_DEFINE_TYPE_WITH_CODE (AppInfoProxy, app_info_proxy, G_TYPE_DBUS_PROXY,
-                         G_ADD_PRIVATE (AppInfoProxy)
-                         G_IMPLEMENT_INTERFACE (TYPE_APP_INFO, app_info_proxy_iface_init))
+G_DEFINE_TYPE_WITH_CODE (AppProxy, app_proxy, G_TYPE_DBUS_PROXY,
+                         G_ADD_PRIVATE (AppProxy)
+                         G_IMPLEMENT_INTERFACE (TYPE_APP, app_proxy_iface_init))
 
 #else
-G_DEFINE_TYPE_WITH_CODE (AppInfoProxy, app_info_proxy, G_TYPE_DBUS_PROXY,
-                         G_IMPLEMENT_INTERFACE (TYPE_APP_INFO, app_info_proxy_iface_init))
+G_DEFINE_TYPE_WITH_CODE (AppProxy, app_proxy, G_TYPE_DBUS_PROXY,
+                         G_IMPLEMENT_INTERFACE (TYPE_APP, app_proxy_iface_init))
 
 #endif
 static void
-app_info_proxy_finalize (GObject *object)
+app_proxy_finalize (GObject *object)
 {
-  AppInfoProxy *proxy = APP_INFO_PROXY (object);
+  AppProxy *proxy = APP_PROXY (object);
   g_datalist_clear (&proxy->priv->qdata);
-  G_OBJECT_CLASS (app_info_proxy_parent_class)->finalize (object);
+  G_OBJECT_CLASS (app_proxy_parent_class)->finalize (object);
 }
 
 static void
-app_info_proxy_get_property (GObject      *object G_GNUC_UNUSED,
+app_proxy_get_property (GObject      *object G_GNUC_UNUSED,
   guint         prop_id G_GNUC_UNUSED,
   GValue       *value G_GNUC_UNUSED,
   GParamSpec   *pspec G_GNUC_UNUSED)
@@ -481,7 +458,7 @@ app_info_proxy_get_property (GObject      *object G_GNUC_UNUSED,
 }
 
 static void
-app_info_proxy_set_property (GObject      *object G_GNUC_UNUSED,
+app_proxy_set_property (GObject      *object G_GNUC_UNUSED,
   guint         prop_id G_GNUC_UNUSED,
   const GValue *value G_GNUC_UNUSED,
   GParamSpec   *pspec G_GNUC_UNUSED)
@@ -489,7 +466,7 @@ app_info_proxy_set_property (GObject      *object G_GNUC_UNUSED,
 }
 
 static void
-app_info_proxy_g_signal (GDBusProxy *proxy,
+app_proxy_g_signal (GDBusProxy *proxy,
   const gchar *sender_name G_GNUC_UNUSED,
   const gchar *signal_name,
   GVariant *parameters)
@@ -501,12 +478,12 @@ app_info_proxy_g_signal (GDBusProxy *proxy,
   gsize num_params;
   gsize n;
   guint signal_id;
-  info = (_ExtendedGDBusSignalInfo *) g_dbus_interface_info_lookup_signal ((GDBusInterfaceInfo *) &_app_info_interface_info.parent_struct, signal_name);
+  info = (_ExtendedGDBusSignalInfo *) g_dbus_interface_info_lookup_signal ((GDBusInterfaceInfo *) &_app_interface_info.parent_struct, signal_name);
   if (info == NULL)
     return;
   num_params = g_variant_n_children (parameters);
   paramv = g_new0 (GValue, num_params + 1);
-  g_value_init (&paramv[0], TYPE_APP_INFO);
+  g_value_init (&paramv[0], TYPE_APP);
   g_value_set_object (&paramv[0], proxy);
   g_variant_iter_init (&iter, parameters);
   n = 1;
@@ -523,7 +500,7 @@ app_info_proxy_g_signal (GDBusProxy *proxy,
         g_dbus_gvariant_to_gvalue (child, &paramv[n++]);
       g_variant_unref (child);
     }
-  signal_id = g_signal_lookup (info->signal_name, TYPE_APP_INFO);
+  signal_id = g_signal_lookup (info->signal_name, TYPE_APP);
   g_signal_emitv (paramv, signal_id, 0, NULL);
   for (n = 0; n < num_params + 1; n++)
     g_value_unset (&paramv[n]);
@@ -531,11 +508,11 @@ app_info_proxy_g_signal (GDBusProxy *proxy,
 }
 
 static void
-app_info_proxy_g_properties_changed (GDBusProxy *_proxy,
+app_proxy_g_properties_changed (GDBusProxy *_proxy,
   GVariant *changed_properties,
   const gchar *const *invalidated_properties)
 {
-  AppInfoProxy *proxy = APP_INFO_PROXY (_proxy);
+  AppProxy *proxy = APP_PROXY (_proxy);
   guint n;
   const gchar *key;
   GVariantIter *iter;
@@ -543,7 +520,7 @@ app_info_proxy_g_properties_changed (GDBusProxy *_proxy,
   g_variant_get (changed_properties, "a{sv}", &iter);
   while (g_variant_iter_next (iter, "{&sv}", &key, NULL))
     {
-      info = (_ExtendedGDBusPropertyInfo *) g_dbus_interface_info_lookup_property ((GDBusInterfaceInfo *) &_app_info_interface_info.parent_struct, key);
+      info = (_ExtendedGDBusPropertyInfo *) g_dbus_interface_info_lookup_property ((GDBusInterfaceInfo *) &_app_interface_info.parent_struct, key);
       g_datalist_remove_data (&proxy->priv->qdata, key);
       if (info != NULL)
         g_object_notify (G_OBJECT (proxy), info->hyphen_name);
@@ -551,7 +528,7 @@ app_info_proxy_g_properties_changed (GDBusProxy *_proxy,
   g_variant_iter_free (iter);
   for (n = 0; invalidated_properties[n] != NULL; n++)
     {
-      info = (_ExtendedGDBusPropertyInfo *) g_dbus_interface_info_lookup_property ((GDBusInterfaceInfo *) &_app_info_interface_info.parent_struct, invalidated_properties[n]);
+      info = (_ExtendedGDBusPropertyInfo *) g_dbus_interface_info_lookup_property ((GDBusInterfaceInfo *) &_app_interface_info.parent_struct, invalidated_properties[n]);
       g_datalist_remove_data (&proxy->priv->qdata, invalidated_properties[n]);
       if (info != NULL)
         g_object_notify (G_OBJECT (proxy), info->hyphen_name);
@@ -559,44 +536,44 @@ app_info_proxy_g_properties_changed (GDBusProxy *_proxy,
 }
 
 static void
-app_info_proxy_init (AppInfoProxy *proxy)
+app_proxy_init (AppProxy *proxy)
 {
 #if GLIB_VERSION_MAX_ALLOWED >= GLIB_VERSION_2_38
-  proxy->priv = app_info_proxy_get_instance_private (proxy);
+  proxy->priv = app_proxy_get_instance_private (proxy);
 #else
-  proxy->priv = G_TYPE_INSTANCE_GET_PRIVATE (proxy, TYPE_APP_INFO_PROXY, AppInfoProxyPrivate);
+  proxy->priv = G_TYPE_INSTANCE_GET_PRIVATE (proxy, TYPE_APP_PROXY, AppProxyPrivate);
 #endif
 
-  g_dbus_proxy_set_interface_info (G_DBUS_PROXY (proxy), app_info_interface_info ());
+  g_dbus_proxy_set_interface_info (G_DBUS_PROXY (proxy), app_interface_info ());
 }
 
 static void
-app_info_proxy_class_init (AppInfoProxyClass *klass)
+app_proxy_class_init (AppProxyClass *klass)
 {
   GObjectClass *gobject_class;
   GDBusProxyClass *proxy_class;
 
   gobject_class = G_OBJECT_CLASS (klass);
-  gobject_class->finalize     = app_info_proxy_finalize;
-  gobject_class->get_property = app_info_proxy_get_property;
-  gobject_class->set_property = app_info_proxy_set_property;
+  gobject_class->finalize     = app_proxy_finalize;
+  gobject_class->get_property = app_proxy_get_property;
+  gobject_class->set_property = app_proxy_set_property;
 
   proxy_class = G_DBUS_PROXY_CLASS (klass);
-  proxy_class->g_signal = app_info_proxy_g_signal;
-  proxy_class->g_properties_changed = app_info_proxy_g_properties_changed;
+  proxy_class->g_signal = app_proxy_g_signal;
+  proxy_class->g_properties_changed = app_proxy_g_properties_changed;
 
 #if GLIB_VERSION_MAX_ALLOWED < GLIB_VERSION_2_38
-  g_type_class_add_private (klass, sizeof (AppInfoProxyPrivate));
+  g_type_class_add_private (klass, sizeof (AppProxyPrivate));
 #endif
 }
 
 static void
-app_info_proxy_iface_init (AppInfoIface *iface G_GNUC_UNUSED)
+app_proxy_iface_init (AppIface *iface G_GNUC_UNUSED)
 {
 }
 
 /**
- * app_info_proxy_new:
+ * app_proxy_new:
  * @connection: A #GDBusConnection.
  * @flags: Flags from the #GDBusProxyFlags enumeration.
  * @name: (nullable): A bus name (well-known or unique) or %NULL if @connection is not a message bus connection.
@@ -605,15 +582,15 @@ app_info_proxy_iface_init (AppInfoIface *iface G_GNUC_UNUSED)
  * @callback: A #GAsyncReadyCallback to call when the request is satisfied.
  * @user_data: User data to pass to @callback.
  *
- * Asynchronously creates a proxy for the D-Bus interface <link linkend="gdbus-interface-ti-example-AppInfo.top_of_page">ti.example.AppInfo</link>. See g_dbus_proxy_new() for more details.
+ * Asynchronously creates a proxy for the D-Bus interface <link linkend="gdbus-interface-ti-example-App.top_of_page">ti.example.App</link>. See g_dbus_proxy_new() for more details.
  *
  * When the operation is finished, @callback will be invoked in the thread-default main loop of the thread you are calling this method from (see g_main_context_push_thread_default()).
- * You can then call app_info_proxy_new_finish() to get the result of the operation.
+ * You can then call app_proxy_new_finish() to get the result of the operation.
  *
- * See app_info_proxy_new_sync() for the synchronous, blocking version of this constructor.
+ * See app_proxy_new_sync() for the synchronous, blocking version of this constructor.
  */
 void
-app_info_proxy_new (
+app_proxy_new (
     GDBusConnection     *connection,
     GDBusProxyFlags      flags,
     const gchar         *name,
@@ -622,20 +599,20 @@ app_info_proxy_new (
     GAsyncReadyCallback  callback,
     gpointer             user_data)
 {
-  g_async_initable_new_async (TYPE_APP_INFO_PROXY, G_PRIORITY_DEFAULT, cancellable, callback, user_data, "g-flags", flags, "g-name", name, "g-connection", connection, "g-object-path", object_path, "g-interface-name", "ti.example.AppInfo", NULL);
+  g_async_initable_new_async (TYPE_APP_PROXY, G_PRIORITY_DEFAULT, cancellable, callback, user_data, "g-flags", flags, "g-name", name, "g-connection", connection, "g-object-path", object_path, "g-interface-name", "ti.example.App", NULL);
 }
 
 /**
- * app_info_proxy_new_finish:
- * @res: The #GAsyncResult obtained from the #GAsyncReadyCallback passed to app_info_proxy_new().
+ * app_proxy_new_finish:
+ * @res: The #GAsyncResult obtained from the #GAsyncReadyCallback passed to app_proxy_new().
  * @error: Return location for error or %NULL
  *
- * Finishes an operation started with app_info_proxy_new().
+ * Finishes an operation started with app_proxy_new().
  *
- * Returns: (transfer full) (type AppInfoProxy): The constructed proxy object or %NULL if @error is set.
+ * Returns: (transfer full) (type AppProxy): The constructed proxy object or %NULL if @error is set.
  */
-AppInfo *
-app_info_proxy_new_finish (
+App *
+app_proxy_new_finish (
     GAsyncResult        *res,
     GError             **error)
 {
@@ -645,13 +622,13 @@ app_info_proxy_new_finish (
   ret = g_async_initable_new_finish (G_ASYNC_INITABLE (source_object), res, error);
   g_object_unref (source_object);
   if (ret != NULL)
-    return APP_INFO (ret);
+    return APP (ret);
   else
     return NULL;
 }
 
 /**
- * app_info_proxy_new_sync:
+ * app_proxy_new_sync:
  * @connection: A #GDBusConnection.
  * @flags: Flags from the #GDBusProxyFlags enumeration.
  * @name: (nullable): A bus name (well-known or unique) or %NULL if @connection is not a message bus connection.
@@ -659,16 +636,16 @@ app_info_proxy_new_finish (
  * @cancellable: (nullable): A #GCancellable or %NULL.
  * @error: Return location for error or %NULL
  *
- * Synchronously creates a proxy for the D-Bus interface <link linkend="gdbus-interface-ti-example-AppInfo.top_of_page">ti.example.AppInfo</link>. See g_dbus_proxy_new_sync() for more details.
+ * Synchronously creates a proxy for the D-Bus interface <link linkend="gdbus-interface-ti-example-App.top_of_page">ti.example.App</link>. See g_dbus_proxy_new_sync() for more details.
  *
  * The calling thread is blocked until a reply is received.
  *
- * See app_info_proxy_new() for the asynchronous version of this constructor.
+ * See app_proxy_new() for the asynchronous version of this constructor.
  *
- * Returns: (transfer full) (type AppInfoProxy): The constructed proxy object or %NULL if @error is set.
+ * Returns: (transfer full) (type AppProxy): The constructed proxy object or %NULL if @error is set.
  */
-AppInfo *
-app_info_proxy_new_sync (
+App *
+app_proxy_new_sync (
     GDBusConnection     *connection,
     GDBusProxyFlags      flags,
     const gchar         *name,
@@ -677,16 +654,16 @@ app_info_proxy_new_sync (
     GError             **error)
 {
   GInitable *ret;
-  ret = g_initable_new (TYPE_APP_INFO_PROXY, cancellable, error, "g-flags", flags, "g-name", name, "g-connection", connection, "g-object-path", object_path, "g-interface-name", "ti.example.AppInfo", NULL);
+  ret = g_initable_new (TYPE_APP_PROXY, cancellable, error, "g-flags", flags, "g-name", name, "g-connection", connection, "g-object-path", object_path, "g-interface-name", "ti.example.App", NULL);
   if (ret != NULL)
-    return APP_INFO (ret);
+    return APP (ret);
   else
     return NULL;
 }
 
 
 /**
- * app_info_proxy_new_for_bus:
+ * app_proxy_new_for_bus:
  * @bus_type: A #GBusType.
  * @flags: Flags from the #GDBusProxyFlags enumeration.
  * @name: A bus name (well-known or unique).
@@ -695,15 +672,15 @@ app_info_proxy_new_sync (
  * @callback: A #GAsyncReadyCallback to call when the request is satisfied.
  * @user_data: User data to pass to @callback.
  *
- * Like app_info_proxy_new() but takes a #GBusType instead of a #GDBusConnection.
+ * Like app_proxy_new() but takes a #GBusType instead of a #GDBusConnection.
  *
  * When the operation is finished, @callback will be invoked in the thread-default main loop of the thread you are calling this method from (see g_main_context_push_thread_default()).
- * You can then call app_info_proxy_new_for_bus_finish() to get the result of the operation.
+ * You can then call app_proxy_new_for_bus_finish() to get the result of the operation.
  *
- * See app_info_proxy_new_for_bus_sync() for the synchronous, blocking version of this constructor.
+ * See app_proxy_new_for_bus_sync() for the synchronous, blocking version of this constructor.
  */
 void
-app_info_proxy_new_for_bus (
+app_proxy_new_for_bus (
     GBusType             bus_type,
     GDBusProxyFlags      flags,
     const gchar         *name,
@@ -712,20 +689,20 @@ app_info_proxy_new_for_bus (
     GAsyncReadyCallback  callback,
     gpointer             user_data)
 {
-  g_async_initable_new_async (TYPE_APP_INFO_PROXY, G_PRIORITY_DEFAULT, cancellable, callback, user_data, "g-flags", flags, "g-name", name, "g-bus-type", bus_type, "g-object-path", object_path, "g-interface-name", "ti.example.AppInfo", NULL);
+  g_async_initable_new_async (TYPE_APP_PROXY, G_PRIORITY_DEFAULT, cancellable, callback, user_data, "g-flags", flags, "g-name", name, "g-bus-type", bus_type, "g-object-path", object_path, "g-interface-name", "ti.example.App", NULL);
 }
 
 /**
- * app_info_proxy_new_for_bus_finish:
- * @res: The #GAsyncResult obtained from the #GAsyncReadyCallback passed to app_info_proxy_new_for_bus().
+ * app_proxy_new_for_bus_finish:
+ * @res: The #GAsyncResult obtained from the #GAsyncReadyCallback passed to app_proxy_new_for_bus().
  * @error: Return location for error or %NULL
  *
- * Finishes an operation started with app_info_proxy_new_for_bus().
+ * Finishes an operation started with app_proxy_new_for_bus().
  *
- * Returns: (transfer full) (type AppInfoProxy): The constructed proxy object or %NULL if @error is set.
+ * Returns: (transfer full) (type AppProxy): The constructed proxy object or %NULL if @error is set.
  */
-AppInfo *
-app_info_proxy_new_for_bus_finish (
+App *
+app_proxy_new_for_bus_finish (
     GAsyncResult        *res,
     GError             **error)
 {
@@ -735,13 +712,13 @@ app_info_proxy_new_for_bus_finish (
   ret = g_async_initable_new_finish (G_ASYNC_INITABLE (source_object), res, error);
   g_object_unref (source_object);
   if (ret != NULL)
-    return APP_INFO (ret);
+    return APP (ret);
   else
     return NULL;
 }
 
 /**
- * app_info_proxy_new_for_bus_sync:
+ * app_proxy_new_for_bus_sync:
  * @bus_type: A #GBusType.
  * @flags: Flags from the #GDBusProxyFlags enumeration.
  * @name: A bus name (well-known or unique).
@@ -749,16 +726,16 @@ app_info_proxy_new_for_bus_finish (
  * @cancellable: (nullable): A #GCancellable or %NULL.
  * @error: Return location for error or %NULL
  *
- * Like app_info_proxy_new_sync() but takes a #GBusType instead of a #GDBusConnection.
+ * Like app_proxy_new_sync() but takes a #GBusType instead of a #GDBusConnection.
  *
  * The calling thread is blocked until a reply is received.
  *
- * See app_info_proxy_new_for_bus() for the asynchronous version of this constructor.
+ * See app_proxy_new_for_bus() for the asynchronous version of this constructor.
  *
- * Returns: (transfer full) (type AppInfoProxy): The constructed proxy object or %NULL if @error is set.
+ * Returns: (transfer full) (type AppProxy): The constructed proxy object or %NULL if @error is set.
  */
-AppInfo *
-app_info_proxy_new_for_bus_sync (
+App *
+app_proxy_new_for_bus_sync (
     GBusType             bus_type,
     GDBusProxyFlags      flags,
     const gchar         *name,
@@ -767,9 +744,9 @@ app_info_proxy_new_for_bus_sync (
     GError             **error)
 {
   GInitable *ret;
-  ret = g_initable_new (TYPE_APP_INFO_PROXY, cancellable, error, "g-flags", flags, "g-name", name, "g-bus-type", bus_type, "g-object-path", object_path, "g-interface-name", "ti.example.AppInfo", NULL);
+  ret = g_initable_new (TYPE_APP_PROXY, cancellable, error, "g-flags", flags, "g-name", name, "g-bus-type", bus_type, "g-object-path", object_path, "g-interface-name", "ti.example.App", NULL);
   if (ret != NULL)
-    return APP_INFO (ret);
+    return APP (ret);
   else
     return NULL;
 }
@@ -778,19 +755,19 @@ app_info_proxy_new_for_bus_sync (
 /* ------------------------------------------------------------------------ */
 
 /**
- * AppInfoSkeleton:
+ * AppSkeleton:
  *
- * The #AppInfoSkeleton structure contains only private data and should only be accessed using the provided API.
+ * The #AppSkeleton structure contains only private data and should only be accessed using the provided API.
  */
 
 /**
- * AppInfoSkeletonClass:
+ * AppSkeletonClass:
  * @parent_class: The parent class.
  *
- * Class structure for #AppInfoSkeleton.
+ * Class structure for #AppSkeleton.
  */
 
-struct _AppInfoSkeletonPrivate
+struct _AppSkeletonPrivate
 {
   GValue *properties;
   GList *changed_properties;
@@ -800,7 +777,7 @@ struct _AppInfoSkeletonPrivate
 };
 
 static void
-_app_info_skeleton_handle_method_call (
+_app_skeleton_handle_method_call (
   GDBusConnection *connection G_GNUC_UNUSED,
   const gchar *sender G_GNUC_UNUSED,
   const gchar *object_path G_GNUC_UNUSED,
@@ -810,7 +787,7 @@ _app_info_skeleton_handle_method_call (
   GDBusMethodInvocation *invocation,
   gpointer user_data)
 {
-  AppInfoSkeleton *skeleton = APP_INFO_SKELETON (user_data);
+  AppSkeleton *skeleton = APP_SKELETON (user_data);
   _ExtendedGDBusMethodInfo *info;
   GVariantIter iter;
   GVariant *child;
@@ -825,7 +802,7 @@ _app_info_skeleton_handle_method_call (
   num_params = g_variant_n_children (parameters);
   num_extra = info->pass_fdlist ? 3 : 2;  paramv = g_new0 (GValue, num_params + num_extra);
   n = 0;
-  g_value_init (&paramv[n], TYPE_APP_INFO);
+  g_value_init (&paramv[n], TYPE_APP);
   g_value_set_object (&paramv[n++], skeleton);
   g_value_init (&paramv[n], G_TYPE_DBUS_METHOD_INVOCATION);
   g_value_set_object (&paramv[n++], invocation);
@@ -852,7 +829,7 @@ _app_info_skeleton_handle_method_call (
         g_dbus_gvariant_to_gvalue (child, &paramv[n++]);
       g_variant_unref (child);
     }
-  signal_id = g_signal_lookup (info->signal_name, TYPE_APP_INFO);
+  signal_id = g_signal_lookup (info->signal_name, TYPE_APP);
   g_value_init (&return_value, G_TYPE_BOOLEAN);
   g_signal_emitv (paramv, signal_id, 0, &return_value);
   if (!g_value_get_boolean (&return_value))
@@ -864,7 +841,7 @@ _app_info_skeleton_handle_method_call (
 }
 
 static GVariant *
-_app_info_skeleton_handle_get_property (
+_app_skeleton_handle_get_property (
   GDBusConnection *connection G_GNUC_UNUSED,
   const gchar *sender G_GNUC_UNUSED,
   const gchar *object_path G_GNUC_UNUSED,
@@ -873,13 +850,13 @@ _app_info_skeleton_handle_get_property (
   GError **error,
   gpointer user_data)
 {
-  AppInfoSkeleton *skeleton = APP_INFO_SKELETON (user_data);
+  AppSkeleton *skeleton = APP_SKELETON (user_data);
   GValue value = G_VALUE_INIT;
   GParamSpec *pspec;
   _ExtendedGDBusPropertyInfo *info;
   GVariant *ret;
   ret = NULL;
-  info = (_ExtendedGDBusPropertyInfo *) g_dbus_interface_info_lookup_property ((GDBusInterfaceInfo *) &_app_info_interface_info.parent_struct, property_name);
+  info = (_ExtendedGDBusPropertyInfo *) g_dbus_interface_info_lookup_property ((GDBusInterfaceInfo *) &_app_interface_info.parent_struct, property_name);
   g_assert (info != NULL);
   pspec = g_object_class_find_property (G_OBJECT_GET_CLASS (skeleton), info->hyphen_name);
   if (pspec == NULL)
@@ -897,7 +874,7 @@ _app_info_skeleton_handle_get_property (
 }
 
 static gboolean
-_app_info_skeleton_handle_set_property (
+_app_skeleton_handle_set_property (
   GDBusConnection *connection G_GNUC_UNUSED,
   const gchar *sender G_GNUC_UNUSED,
   const gchar *object_path G_GNUC_UNUSED,
@@ -907,13 +884,13 @@ _app_info_skeleton_handle_set_property (
   GError **error,
   gpointer user_data)
 {
-  AppInfoSkeleton *skeleton = APP_INFO_SKELETON (user_data);
+  AppSkeleton *skeleton = APP_SKELETON (user_data);
   GValue value = G_VALUE_INIT;
   GParamSpec *pspec;
   _ExtendedGDBusPropertyInfo *info;
   gboolean ret;
   ret = FALSE;
-  info = (_ExtendedGDBusPropertyInfo *) g_dbus_interface_info_lookup_property ((GDBusInterfaceInfo *) &_app_info_interface_info.parent_struct, property_name);
+  info = (_ExtendedGDBusPropertyInfo *) g_dbus_interface_info_lookup_property ((GDBusInterfaceInfo *) &_app_interface_info.parent_struct, property_name);
   g_assert (info != NULL);
   pspec = g_object_class_find_property (G_OBJECT_GET_CLASS (skeleton), info->hyphen_name);
   if (pspec == NULL)
@@ -933,43 +910,43 @@ _app_info_skeleton_handle_set_property (
   return ret;
 }
 
-static const GDBusInterfaceVTable _app_info_skeleton_vtable =
+static const GDBusInterfaceVTable _app_skeleton_vtable =
 {
-  _app_info_skeleton_handle_method_call,
-  _app_info_skeleton_handle_get_property,
-  _app_info_skeleton_handle_set_property,
+  _app_skeleton_handle_method_call,
+  _app_skeleton_handle_get_property,
+  _app_skeleton_handle_set_property,
   {NULL}
 };
 
 static GDBusInterfaceInfo *
-app_info_skeleton_dbus_interface_get_info (GDBusInterfaceSkeleton *skeleton G_GNUC_UNUSED)
+app_skeleton_dbus_interface_get_info (GDBusInterfaceSkeleton *skeleton G_GNUC_UNUSED)
 {
-  return app_info_interface_info ();
+  return app_interface_info ();
 }
 
 static GDBusInterfaceVTable *
-app_info_skeleton_dbus_interface_get_vtable (GDBusInterfaceSkeleton *skeleton G_GNUC_UNUSED)
+app_skeleton_dbus_interface_get_vtable (GDBusInterfaceSkeleton *skeleton G_GNUC_UNUSED)
 {
-  return (GDBusInterfaceVTable *) &_app_info_skeleton_vtable;
+  return (GDBusInterfaceVTable *) &_app_skeleton_vtable;
 }
 
 static GVariant *
-app_info_skeleton_dbus_interface_get_properties (GDBusInterfaceSkeleton *_skeleton)
+app_skeleton_dbus_interface_get_properties (GDBusInterfaceSkeleton *_skeleton)
 {
-  AppInfoSkeleton *skeleton = APP_INFO_SKELETON (_skeleton);
+  AppSkeleton *skeleton = APP_SKELETON (_skeleton);
 
   GVariantBuilder builder;
   guint n;
   g_variant_builder_init (&builder, G_VARIANT_TYPE ("a{sv}"));
-  if (_app_info_interface_info.parent_struct.properties == NULL)
+  if (_app_interface_info.parent_struct.properties == NULL)
     goto out;
-  for (n = 0; _app_info_interface_info.parent_struct.properties[n] != NULL; n++)
+  for (n = 0; _app_interface_info.parent_struct.properties[n] != NULL; n++)
     {
-      GDBusPropertyInfo *info = _app_info_interface_info.parent_struct.properties[n];
+      GDBusPropertyInfo *info = _app_interface_info.parent_struct.properties[n];
       if (info->flags & G_DBUS_PROPERTY_INFO_FLAGS_READABLE)
         {
           GVariant *value;
-          value = _app_info_skeleton_handle_get_property (g_dbus_interface_skeleton_get_connection (G_DBUS_INTERFACE_SKELETON (skeleton)), NULL, g_dbus_interface_skeleton_get_object_path (G_DBUS_INTERFACE_SKELETON (skeleton)), "ti.example.AppInfo", info->name, NULL, skeleton);
+          value = _app_skeleton_handle_get_property (g_dbus_interface_skeleton_get_connection (G_DBUS_INTERFACE_SKELETON (skeleton)), NULL, g_dbus_interface_skeleton_get_object_path (G_DBUS_INTERFACE_SKELETON (skeleton)), "ti.example.App", info->name, NULL, skeleton);
           if (value != NULL)
             {
               g_variant_take_ref (value);
@@ -983,40 +960,40 @@ out:
 }
 
 static void
-app_info_skeleton_dbus_interface_flush (GDBusInterfaceSkeleton *_skeleton G_GNUC_UNUSED)
+app_skeleton_dbus_interface_flush (GDBusInterfaceSkeleton *_skeleton G_GNUC_UNUSED)
 {
 }
 
-static void app_info_skeleton_iface_init (AppInfoIface *iface);
+static void app_skeleton_iface_init (AppIface *iface);
 #if GLIB_VERSION_MAX_ALLOWED >= GLIB_VERSION_2_38
-G_DEFINE_TYPE_WITH_CODE (AppInfoSkeleton, app_info_skeleton, G_TYPE_DBUS_INTERFACE_SKELETON,
-                         G_ADD_PRIVATE (AppInfoSkeleton)
-                         G_IMPLEMENT_INTERFACE (TYPE_APP_INFO, app_info_skeleton_iface_init))
+G_DEFINE_TYPE_WITH_CODE (AppSkeleton, app_skeleton, G_TYPE_DBUS_INTERFACE_SKELETON,
+                         G_ADD_PRIVATE (AppSkeleton)
+                         G_IMPLEMENT_INTERFACE (TYPE_APP, app_skeleton_iface_init))
 
 #else
-G_DEFINE_TYPE_WITH_CODE (AppInfoSkeleton, app_info_skeleton, G_TYPE_DBUS_INTERFACE_SKELETON,
-                         G_IMPLEMENT_INTERFACE (TYPE_APP_INFO, app_info_skeleton_iface_init))
+G_DEFINE_TYPE_WITH_CODE (AppSkeleton, app_skeleton, G_TYPE_DBUS_INTERFACE_SKELETON,
+                         G_IMPLEMENT_INTERFACE (TYPE_APP, app_skeleton_iface_init))
 
 #endif
 static void
-app_info_skeleton_finalize (GObject *object)
+app_skeleton_finalize (GObject *object)
 {
-  AppInfoSkeleton *skeleton = APP_INFO_SKELETON (object);
+  AppSkeleton *skeleton = APP_SKELETON (object);
   g_list_free_full (skeleton->priv->changed_properties, (GDestroyNotify) _changed_property_free);
   if (skeleton->priv->changed_properties_idle_source != NULL)
     g_source_destroy (skeleton->priv->changed_properties_idle_source);
   g_main_context_unref (skeleton->priv->context);
   g_mutex_clear (&skeleton->priv->lock);
-  G_OBJECT_CLASS (app_info_skeleton_parent_class)->finalize (object);
+  G_OBJECT_CLASS (app_skeleton_parent_class)->finalize (object);
 }
 
 static void
-app_info_skeleton_init (AppInfoSkeleton *skeleton)
+app_skeleton_init (AppSkeleton *skeleton)
 {
 #if GLIB_VERSION_MAX_ALLOWED >= GLIB_VERSION_2_38
-  skeleton->priv = app_info_skeleton_get_instance_private (skeleton);
+  skeleton->priv = app_skeleton_get_instance_private (skeleton);
 #else
-  skeleton->priv = G_TYPE_INSTANCE_GET_PRIVATE (skeleton, TYPE_APP_INFO_SKELETON, AppInfoSkeletonPrivate);
+  skeleton->priv = G_TYPE_INSTANCE_GET_PRIVATE (skeleton, TYPE_APP_SKELETON, AppSkeletonPrivate);
 #endif
 
   g_mutex_init (&skeleton->priv->lock);
@@ -1024,40 +1001,40 @@ app_info_skeleton_init (AppInfoSkeleton *skeleton)
 }
 
 static void
-app_info_skeleton_class_init (AppInfoSkeletonClass *klass)
+app_skeleton_class_init (AppSkeletonClass *klass)
 {
   GObjectClass *gobject_class;
   GDBusInterfaceSkeletonClass *skeleton_class;
 
   gobject_class = G_OBJECT_CLASS (klass);
-  gobject_class->finalize = app_info_skeleton_finalize;
+  gobject_class->finalize = app_skeleton_finalize;
 
   skeleton_class = G_DBUS_INTERFACE_SKELETON_CLASS (klass);
-  skeleton_class->get_info = app_info_skeleton_dbus_interface_get_info;
-  skeleton_class->get_properties = app_info_skeleton_dbus_interface_get_properties;
-  skeleton_class->flush = app_info_skeleton_dbus_interface_flush;
-  skeleton_class->get_vtable = app_info_skeleton_dbus_interface_get_vtable;
+  skeleton_class->get_info = app_skeleton_dbus_interface_get_info;
+  skeleton_class->get_properties = app_skeleton_dbus_interface_get_properties;
+  skeleton_class->flush = app_skeleton_dbus_interface_flush;
+  skeleton_class->get_vtable = app_skeleton_dbus_interface_get_vtable;
 
 #if GLIB_VERSION_MAX_ALLOWED < GLIB_VERSION_2_38
-  g_type_class_add_private (klass, sizeof (AppInfoSkeletonPrivate));
+  g_type_class_add_private (klass, sizeof (AppSkeletonPrivate));
 #endif
 }
 
 static void
-app_info_skeleton_iface_init (AppInfoIface *iface G_GNUC_UNUSED)
+app_skeleton_iface_init (AppIface *iface G_GNUC_UNUSED)
 {
 }
 
 /**
- * app_info_skeleton_new:
+ * app_skeleton_new:
  *
- * Creates a skeleton object for the D-Bus interface <link linkend="gdbus-interface-ti-example-AppInfo.top_of_page">ti.example.AppInfo</link>.
+ * Creates a skeleton object for the D-Bus interface <link linkend="gdbus-interface-ti-example-App.top_of_page">ti.example.App</link>.
  *
- * Returns: (transfer full) (type AppInfoSkeleton): The skeleton object.
+ * Returns: (transfer full) (type AppSkeleton): The skeleton object.
  */
-AppInfo *
-app_info_skeleton_new (void)
+App *
+app_skeleton_new (void)
 {
-  return APP_INFO (g_object_new (TYPE_APP_INFO_SKELETON, NULL));
+  return APP (g_object_new (TYPE_APP_SKELETON, NULL));
 }
 

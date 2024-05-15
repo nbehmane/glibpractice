@@ -12,3 +12,13 @@ void print_proxy(GDBusProxy *proxy)
 	g_print("Owner: %s\n", name_owner);
 }
 
+
+void print_error(GError *error)
+{
+
+	if (error == NULL)
+		return;
+	g_printerr("Error: %s\n", error->message);
+	g_error_free(error);
+}	
+

@@ -1,0 +1,7 @@
+<node>
+	<interface name="ti.example.App">
+		<method name="Scan">
+			<arg name="time" direction="in" type="u"/>
+		</method>
+	</interface>
+</node>

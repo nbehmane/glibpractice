@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <gio/gio.h>
-#include "./gen/appinfo.h"
+#include "./gen/application.h"
 #include "bluez_adapter.h"
 
 extern void app_register_application();

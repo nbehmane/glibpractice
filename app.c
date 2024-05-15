@@ -11,26 +11,27 @@
 
 #define VERSION "1.0.0"
 
-/*
- * @brief XML defintion for interface ti.example.AppInfo.xml
- *
- * <method name="Version">
- * 	<arg name="response" direction="out" type="s"/>
- * </method>
+/*  
+ * @brief XML definition for interface ti.example.App.xml
+ *  <node>
+ * 	<interface name="ti.example.Application">
+ * 		<method name="Scan">
+ * 			<arg name="time" direction="in" type="u"/>
+ * 		</method>
+ * 	</interface>
+ * </node>
  */
-static gboolean on_handle_version(AppInfo *interface, 
+static gboolean on_handle_scan(App *interface, 
 		GDBusMethodInvocation *invocation,
-		const char *version,
-		const char *description,
+		guint time,
 		gpointer user_data)
 {
-	version = VERSION;
-	description = "BlueZ Skeleton App - Architecture example for creating new applications.";
-
-	g_print("%s\n", version);
-	g_print("%s\n", description);
+	g_print("Scan: Scanning for %d\n", time);
 	
-	app_info_complete_version(interface, invocation, version, description);
+	//! Make proxy method call to Adapter1.StartDiscovery
+	bluez_adapter_scan(time);
+
+	app_complete_scan(interface, invocation);
 	return TRUE;
 }
 
@@ -40,24 +41,23 @@ static void on_name_acquired(GDBusConnection *connection,
 		const gchar *name, 
 		gpointer user_data)
 {
-	AppInfo *app_interface = NULL;
-
+	App *app_interface = NULL;
 	GError *error = NULL;
 
 	/* Setting up AppInfo interface */
-	app_interface = app_info_skeleton_new();
+	app_interface = app_skeleton_new();
 
 	g_signal_connect(app_interface,
-			"handle-version",
-			G_CALLBACK (on_handle_version),
+			"handle-scan",
+			G_CALLBACK (on_handle_scan),
 			NULL);
 
 	g_dbus_interface_skeleton_export(G_DBUS_INTERFACE_SKELETON (app_interface), 
 			connection, 
-			"/ti/example/AppInfo",
+			"/ti/example/Application",
 			&error);
 	
-	bluez_adapter_proxy_setup(connection);
+	bluez_adapter_proxy_init(connection);
 
 }
 
