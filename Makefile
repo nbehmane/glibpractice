@@ -17,7 +17,7 @@ gen:
 
 
 scan:
-	gdbus call -e -d ti.example -o /ti/example/Application -m ti.example.App.Scan 1 
+	gdbus call -e -d ti.example -o /ti/example/Application -m ti.example.App.Scan 0 
 result:
 	gdbus call -e -d ti.example -o /ti/example/Application -m ti.example.App.GetScanResults 
 

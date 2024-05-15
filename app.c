@@ -51,11 +51,14 @@ static gboolean on_handle_get_scan_results(App *interface,
 		gpointer user_data)
 {
 	GVariant *results = NULL;
-
 	results = bluez_object_get_objects();
+
 #ifdef DEBUG
 	g_print("Results Returned: %s\n", g_variant_get_type_string(results));
 #endif
+
+
+
 
 	app_complete_get_scan_results(interface, invocation, results);
 	//TODO: Free the results

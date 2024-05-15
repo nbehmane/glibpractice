@@ -15,7 +15,7 @@ extern void bluez_adapter_scan(guint time)
 {
 	GError *error = NULL;
 
-	const gchar* discov = time ? "StopDiscovery" : "StartDiscovery";
+	const gchar* discov = time ? "StartDiscovery" : "StopDiscovery";
 	g_dbus_proxy_call_sync( bluez_adapter_proxy,
 			discov,
 			g_variant_new("()", NULL),

@@ -25,11 +25,8 @@ static void on_signal(GDBusProxy* self, gchar* sender_name, gchar* signal_name, 
 {
 
 #ifdef DEBUG
-	g_print("Signal Recieved:\n");
-	g_print("\tSender: %s\n", sender_name);
-	g_print("\tSignal: %s\n", signal_name);
+	g_print("Interface added:%s\n", g_variant_get_type_string(parameters));
 #endif
-
 
 }
 
@@ -54,7 +51,7 @@ extern void bluez_object_proxy_init(GDBusConnection *connection)
 	}
 
 	g_signal_connect(bluez_object_proxy,
-			"g-signal",
+			"g-signal::InterfacesAdded",
 			G_CALLBACK (on_signal),
 			NULL);
 
