@@ -3,5 +3,8 @@
 		<method name="Scan">
 			<arg name="time" direction="in" type="u"/>
 		</method>
+		<method name="GetScanResults">
+			<arg name="results" direction="out" type="(a{oa{sa{sv}}})"/>
+		</method>
 	</interface>
 </node>

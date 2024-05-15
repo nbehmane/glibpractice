@@ -1,31 +1,72 @@
 #include "bluez_object.h"
 
-#define DEBUG
+static GDBusProxy *bluez_object_proxy = NULL;
 
-static GDBusObjectManager *bluez_object_proxy = NULL;
-
-extern void bluez_object_proxy_init(GDBusConnection *connection)
+extern GVariant *bluez_object_get_objects()
 {
 	GError *error = NULL;
+	GVariant *results = NULL;
 
-	bluez_object_proxy = g_dbus_object_manager_client_new_for_bus_sync(
-			G_BUS_TYPE_SYSTEM,
-			G_DBUS_OBJECT_MANAGER_CLIENT_FLAGS_NONE,
-			"org.bluez",
-			"/",
-			NULL,
-			NULL,
-			NULL,
+	results = g_dbus_proxy_call_sync( bluez_object_proxy,
+			"GetManagedObjects",
+			g_variant_new("()", NULL),
+			G_DBUS_CALL_FLAGS_NONE,
+			-1,
 			NULL,
 			&error);
 
 	print_error(error);
 
-#ifdef DEBUG 
-	 
-	gchar *owner = g_dbus_object_manager_client_get_name_owner((GDBusObjectManagerClient*)bluez_object_proxy);
-	g_print("Object Owner: %s", owner);
-	if (owner != NULL)
-		g_free(owner);
+	return results;
+}
+
+
+static void on_signal(GDBusProxy* self, gchar* sender_name, gchar* signal_name, GVariant* parameters, gpointer user_data)
+{
+
+#ifdef DEBUG
+	g_print("Signal Recieved:\n");
+	g_print("\tSender: %s\n", sender_name);
+	g_print("\tSignal: %s\n", signal_name);
 #endif
+
+
+}
+
+extern void bluez_object_proxy_init(GDBusConnection *connection)
+{
+	GError *error = NULL;
+	// Adapter interface proxy.
+	// This will allow us to call methods via the proxy.
+	bluez_object_proxy = g_dbus_proxy_new_for_bus_sync(G_BUS_TYPE_SYSTEM,
+			G_DBUS_PROXY_FLAGS_NONE,
+			NULL,
+			"org.bluez",
+			"/", 
+			"org.freedesktop.DBus.ObjectManager",
+			NULL,
+			&error);	
+	
+	if (bluez_object_proxy == NULL)
+	{
+		print_error(error);
+		goto out;
+	}
+
+	g_signal_connect(bluez_object_proxy,
+			"g-signal",
+			G_CALLBACK (on_signal),
+			NULL);
+
+#ifdef DEBUG
+	// Print the owner ID of the proxy object.
+	print_proxy(bluez_object_proxy);
+#endif
+
+	return;
+
+out:
+	if (bluez_object_proxy != NULL)
+		g_object_unref(bluez_object_proxy);
+
 }

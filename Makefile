@@ -16,8 +16,10 @@ gen:
 	@mv application* ./gen
 
 
-app:
+scan:
 	gdbus call -e -d ti.example -o /ti/example/Application -m ti.example.App.Scan 1 
+result:
+	gdbus call -e -d ti.example -o /ti/example/Application -m ti.example.App.GetScanResults 
 
 all: $(BIN)
 

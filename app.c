@@ -14,7 +14,7 @@
 /*  
  * @brief XML definition for interface ti.example.App.xml
  *  <node>
- * 	<interface name="ti.example.Application">
+ * 	<interface name="ti.example.App">
  * 		<method name="Scan">
  * 			<arg name="time" direction="in" type="u"/>
  * 		</method>
@@ -26,12 +26,39 @@ static gboolean on_handle_scan(App *interface,
 		guint time,
 		gpointer user_data)
 {
+
+#ifdef DEBUG
 	g_print("Scan: Scanning for %d\n", time);
-	
+#endif
 	//! Make proxy method call to Adapter1.StartDiscovery
 	bluez_adapter_scan(time);
-
 	app_complete_scan(interface, invocation);
+	return TRUE;
+}
+
+
+/*  
+ * @brief XML definition for interface ti.example.App.xml
+ *  <node>
+ * 	<interface name="ti.example.App">
+ * 		<method name="GetScanResults">
+ * 		</method>
+ * 	</interface>
+ * </node>
+ */
+static gboolean on_handle_get_scan_results(App *interface, 
+		GDBusMethodInvocation *invocation,
+		gpointer user_data)
+{
+	GVariant *results = NULL;
+
+	results = bluez_object_get_objects();
+#ifdef DEBUG
+	g_print("Results Returned: %s\n", g_variant_get_type_string(results));
+#endif
+
+	app_complete_get_scan_results(interface, invocation, results);
+	//TODO: Free the results
 	return TRUE;
 }
 
@@ -50,6 +77,11 @@ static void on_name_acquired(GDBusConnection *connection,
 	g_signal_connect(app_interface,
 			"handle-scan",
 			G_CALLBACK (on_handle_scan),
+			NULL);
+
+	g_signal_connect(app_interface,
+			"handle-get-scan-results",
+			G_CALLBACK (on_handle_get_scan_results),
 			NULL);
 
 	g_dbus_interface_skeleton_export(G_DBUS_INTERFACE_SKELETON (app_interface), 

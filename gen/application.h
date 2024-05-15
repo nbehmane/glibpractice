@@ -30,6 +30,10 @@ struct _AppIface
 {
   GTypeInterface parent_iface;
 
+  gboolean (*handle_get_scan_results) (
+    App *object,
+    GDBusMethodInvocation *invocation);
+
   gboolean (*handle_scan) (
     App *object,
     GDBusMethodInvocation *invocation,
@@ -47,6 +51,11 @@ guint app_override_properties (GObjectClass *klass, guint property_id_begin);
 void app_complete_scan (
     App *object,
     GDBusMethodInvocation *invocation);
+
+void app_complete_get_scan_results (
+    App *object,
+    GDBusMethodInvocation *invocation,
+    GVariant *results);
 
 
 
@@ -66,6 +75,24 @@ gboolean app_call_scan_finish (
 gboolean app_call_scan_sync (
     App *proxy,
     guint arg_time,
+    GCancellable *cancellable,
+    GError **error);
+
+void app_call_get_scan_results (
+    App *proxy,
+    GCancellable *cancellable,
+    GAsyncReadyCallback callback,
+    gpointer user_data);
+
+gboolean app_call_get_scan_results_finish (
+    App *proxy,
+    GVariant **out_results,
+    GAsyncResult *res,
+    GError **error);
+
+gboolean app_call_get_scan_results_sync (
+    App *proxy,
+    GVariant **out_results,
     GCancellable *cancellable,
     GError **error);
 

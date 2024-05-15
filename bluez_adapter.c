@@ -15,17 +15,19 @@ extern void bluez_adapter_scan(guint time)
 {
 	GError *error = NULL;
 
+	const gchar* discov = time ? "StopDiscovery" : "StartDiscovery";
 	g_dbus_proxy_call_sync( bluez_adapter_proxy,
-			"StartDiscovery",
+			discov,
 			g_variant_new("()", NULL),
 			G_DBUS_CALL_FLAGS_NONE,
 			-1,
 			NULL,
 			&error);
 
-	print_error(error);
 
+	print_error(error);
 }
+
 
 
 /**
@@ -63,9 +65,10 @@ extern void bluez_adapter_proxy_init(GDBusConnection *connection)
 			G_CALLBACK(on_adapter_signal),
 			NULL);
 
-
+#ifdef DEBUG
 	// Print the owner ID of the proxy object.
 	print_proxy(bluez_adapter_proxy);
+#endif
 
 	return;
 
@@ -83,7 +86,9 @@ static void on_adapter_signal(GDBusProxy *proxy,
 		GVariant *parameters,
 		gpointer user_data)
 {
+#ifdef DEBUG
 	g_print("Adapter: Signal\n");
+#endif
 }
 
 
@@ -92,6 +97,8 @@ static void on_adapter_properties_changed(GDBusProxy *proxy,
 				const gchar* const *invalidated_properties,
 				gpointer user_data)
 {
+#ifdef DEBUG
 	g_print("Adapter: Properties Changed\n");
+#endif
 }
 /**** SIGNAL HANDLERS END ****/
