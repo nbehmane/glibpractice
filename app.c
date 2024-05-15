@@ -9,8 +9,6 @@
  */
 #include "app.h"
 
-#define VERSION "1.0.0"
-
 /*  
  * @brief XML definition for interface ti.example.App.xml
  *  <node>

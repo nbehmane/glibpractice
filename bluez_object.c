@@ -2,7 +2,6 @@
 
 static GDBusProxy *bluez_object_proxy = NULL;
 
-
 /**
  * TODO: once interfacesadded signal is implemented this won't need to be used.
  *
@@ -26,7 +25,7 @@ extern GVariant *bluez_object_get_objects()
 }
 
 
-static void on_signal(GDBusProxy* self, gchar* sender_name, gchar* signal_name, GVariant* parameters, gpointer user_data)
+static void on_signal_interfaces_added(GDBusProxy* self, gchar* sender_name, gchar* signal_name, GVariant* parameters, gpointer user_data)
 {
 	const char *object_path;
 	const char *interfaces;
@@ -60,7 +59,7 @@ extern void bluez_object_proxy_init(GDBusConnection *connection)
 
 	g_signal_connect(bluez_object_proxy,
 			"g-signal::InterfacesAdded",
-			G_CALLBACK (on_signal),
+			G_CALLBACK (on_signal_interfaces_added),
 			NULL);
 
 #ifdef DEBUG
