@@ -11,11 +11,11 @@ extern void bluez_adapter_scan(guint time);
 // Proxy handle
 static GDBusProxy *bluez_adapter_proxy = NULL;
 
-extern void bluez_adapter_scan(guint time)
+extern void bluez_adapter_scan(guint s)
 {
 	GError *error = NULL;
 
-	const gchar* discov = time ? "StartDiscovery" : "StopDiscovery";
+	const gchar* discov = s ? "StartDiscovery" : "StopDiscovery";
 	g_dbus_proxy_call_sync( bluez_adapter_proxy,
 			discov,
 			g_variant_new("()", NULL),

@@ -5,7 +5,7 @@
 #include <gio/gio.h>
 #include "dbushelper.h"
 
-extern GVariant *bluez_object_get_objects();
+extern GVariant *bluez_object_get_devices();
 extern void bluez_object_proxy_init(GDBusConnection *connection);
 
 

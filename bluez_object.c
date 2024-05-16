@@ -1,41 +1,61 @@
 #include "bluez_object.h"
 
+#define DEV_ARR_SIZE 25
+
 static GDBusProxy *bluez_object_proxy = NULL;
 
+static GVariant *device_array[DEV_ARR_SIZE] = { NULL };
+static int device_arr_i = 0; 
+
 /**
- * TODO: once interfacesadded signal is implemented this won't need to be used.
+ * Returns GVariant of type 'as'.
  *
  */
-extern GVariant *bluez_object_get_objects()
+extern GVariant *bluez_object_get_devices()
 {
-	GError *error = NULL;
-	GVariant *results = NULL;
-
-	results = g_dbus_proxy_call_sync( bluez_object_proxy,
-			"GetManagedObjects",
-			g_variant_new("()", NULL),
-			G_DBUS_CALL_FLAGS_NONE,
-			-1,
-			NULL,
-			&error);
-
-	print_error(error);
-
-	return results;
+	return g_variant_new_array(G_VARIANT_TYPE_STRING, device_array, device_arr_i);
 }
 
 
+/**
+ * @brief When an interface is added (a device) this callback occurs.
+ * 	@param parameters We own this pointer. so we must unreference it when we don't want it anymore
+ *
+ */
 static void on_signal_interfaces_added(GDBusProxy* self, gchar* sender_name, gchar* signal_name, GVariant* parameters, gpointer user_data)
 {
-	const char *object_path;
-	const char *interfaces;
+	const gchar *temp_object_path = NULL;
+	const gchar *interface_name = NULL;
+	GVariantIter *interfaces = NULL;
+	GVariant *properties = NULL;
 
-	g_variant_get(parameters, "(&oa{sa{sv}})", &object_path, &interfaces);
-	g_print("Object Path: %s\n", object_path);
+	//! We are extracting the object string (the device address).
+	//! We don't need this to return anything except the object_path because
+	//! We won't be calling any interfaces yet.
+	g_variant_get(parameters, "(&oa{sa{sv}})", &temp_object_path, &interfaces);
+	while(g_variant_iter_next(interfaces, "{&s*}", &interface_name, &properties))
+	{
+		g_variant_take_ref(properties);
+		// If it's what we're looking for, save it to the list.
+		if(g_strstr_len(g_ascii_strdown(interface_name, -1), -1, "device"))
+		{
+			if (device_arr_i < DEV_ARR_SIZE )
+			{
+				device_array[device_arr_i] = g_variant_new("s", temp_object_path); 
+				device_arr_i++;
+			}
 
-	/*TODO: Save this stuff in a struct.*/
+			break;
+		}
+		g_variant_unref(properties);
+	}
 
+	// Free the iterator.
+	g_variant_iter_free(interfaces);
 }
+
+
+
 
 extern void bluez_object_proxy_init(GDBusConnection *connection)
 {

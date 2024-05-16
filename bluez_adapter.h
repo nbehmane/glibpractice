@@ -4,7 +4,7 @@
 #include <stdint.h>
 #include <gio/gio.h>
 
-extern void bluez_adapter_scan(guint time);
+extern void bluez_adapter_scan(guint s);
 extern void bluez_adapter_proxy_init(GDBusConnection *connection);
 
 #endif

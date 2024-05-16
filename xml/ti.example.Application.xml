@@ -1,10 +1,10 @@
 <node>
 	<interface name="ti.example.App">
 		<method name="Scan">
-			<arg name="time" direction="in" type="u"/>
+			<arg name="switch" direction="in" type="u"/>
 		</method>
 		<method name="GetScanResults">
-			<arg name="results" direction="out" type="(a{oa{sa{sv}}})"/>
+			<arg name="results" direction="out" type="as"/>
 		</method>
 	</interface>
 </node>

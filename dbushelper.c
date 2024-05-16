@@ -22,3 +22,12 @@ void print_error(GError *error)
 	g_error_free(error);
 }	
 
+void print_is_floating(GVariant *variant)
+{
+	if (g_variant_is_floating(variant))
+	{
+		g_print("Floating.\n");
+		return;
+	}
+	g_print("Not floating.\n");
+}

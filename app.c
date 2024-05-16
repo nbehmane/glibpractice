@@ -21,15 +21,12 @@
  */
 static gboolean on_handle_scan(App *interface, 
 		GDBusMethodInvocation *invocation,
-		guint time,
+		guint s,
 		gpointer user_data)
 {
 
-#ifdef DEBUG
-	g_print("Scan: Scanning for %d\n", time);
-#endif
 	//! Make proxy method call to Adapter1.StartDiscovery
-	bluez_adapter_scan(time);
+	bluez_adapter_scan(s);
 	app_complete_scan(interface, invocation);
 	return TRUE;
 }
@@ -48,18 +45,23 @@ static gboolean on_handle_get_scan_results(App *interface,
 		GDBusMethodInvocation *invocation,
 		gpointer user_data)
 {
-	GVariant *results = NULL;
-	results = bluez_object_get_objects();
+	int i = 0;
+	const gchar *devices[25] = { NULL };
 
-#ifdef DEBUG
-	g_print("Results Returned: %s\n", g_variant_get_type_string(results));
-#endif
+	GVariant *device_variants = bluez_object_get_devices();
 
+	int num_devices = g_variant_n_children(device_variants);
 
+	for (; i < num_devices; i++)
+	{
+		GVariant *device_path = g_variant_get_child_value(device_variants, i);
 
+		devices[i] = g_variant_get_string(device_path, NULL);
 
-	app_complete_get_scan_results(interface, invocation, results);
-	//TODO: Free the results
+		g_variant_unref(device_path);
+	}
+
+	app_complete_get_scan_results(interface, invocation, devices);
 	return TRUE;
 }
 
