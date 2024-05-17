@@ -6,9 +6,7 @@
 
 int main(void)
 {
-	g_print("---- Example Application ----\n");
 	GMainLoop *loop;
-
 	loop = g_main_loop_new(NULL, FALSE);
 
 	app_register_application();
