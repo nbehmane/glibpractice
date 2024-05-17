@@ -6,5 +6,7 @@
 		<method name="GetScanResults">
 			<arg name="results" direction="out" type="as"/>
 		</method>
+		<method name="ScanConnect">
+		</method>
 	</interface>
 </node>

@@ -31,3 +31,11 @@ void print_is_floating(GVariant *variant)
 	}
 	g_print("Not floating.\n");
 }
+
+
+GVariant *object_tokenizer(gchar *object_path)
+{
+	return NULL;
+}
+
+

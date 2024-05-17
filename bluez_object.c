@@ -39,8 +39,11 @@ static void on_signal_interfaces_added(GDBusProxy* self, gchar* sender_name, gch
 		// If it's what we're looking for, save it to the list.
 		if(g_strstr_len(g_ascii_strdown(interface_name, -1), -1, "device"))
 		{
-			if (device_arr_i < DEV_ARR_SIZE )
+			if (device_arr_i < DEV_ARR_SIZE - 1 )
 			{
+#ifdef DEBUG
+				g_print("Device Object Path: %s\n", temp_object_path);
+#endif
 				device_array[device_arr_i] = g_variant_new("s", temp_object_path); 
 				device_arr_i++;
 			}
