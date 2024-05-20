@@ -45,21 +45,13 @@ static gboolean on_handle_get_scan_results(App *interface,
 		GDBusMethodInvocation *invocation,
 		gpointer user_data)
 {
-	int i = 0;
-	const gchar *devices[25] = { NULL };
+	gchar **devices = NULL;
+	gsize num_devices = 0;
+	devices = bluez_object_get_devices(&num_devices);
 
-	GVariant *device_variants = bluez_object_get_devices();
+	for (int i = 0; i < num_devices; i++)
+		g_print("%s\n", devices[i]);
 
-	int num_devices = g_variant_n_children(device_variants);
-
-	for (; i < num_devices; i++)
-	{
-		GVariant *device_path = g_variant_get_child_value(device_variants, i);
-
-		devices[i] = g_variant_get_string(device_path, NULL);
-
-		g_variant_unref(device_path);
-	}
 
 	app_complete_get_scan_results(interface, invocation, devices);
 	return TRUE;

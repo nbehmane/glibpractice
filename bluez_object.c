@@ -3,17 +3,28 @@
 #define DEV_ARR_SIZE 25
 
 static GDBusProxy *bluez_object_proxy = NULL;
+static gchar *device_array[DEV_ARRAY_SIZE];
+static gsize num_devices = 0;
 
-static GVariant *device_array[DEV_ARR_SIZE] = { NULL };
-static int device_arr_i = 0; 
 
 /**
- * Returns GVariant of type 'as'.
+ * The owner is responsible for free both the strings and the array itself 
  *
  */
-extern GVariant *bluez_object_get_devices()
+extern  gchar** bluez_object_get_devices(gsize *n_devices)
 {
-	return g_variant_new_array(G_VARIANT_TYPE_STRING, device_array, device_arr_i);
+	*n_devices = num_devices;
+
+	gchar **array = g_malloc(sizeof(gchar*) * num_devices);
+
+	for (int i = 0; i < num_devices; i++)
+	{
+		array[i] = device_array[i];
+		device_array[i] = NULL;
+	}
+	num_devices = 0;
+
+	return array;
 }
 
 
@@ -25,36 +36,18 @@ extern GVariant *bluez_object_get_devices()
 static void on_signal_interfaces_added(GDBusProxy* self, gchar* sender_name, gchar* signal_name, GVariant* parameters, gpointer user_data)
 {
 	const gchar *temp_object_path = NULL;
-	const gchar *interface_name = NULL;
-	GVariantIter *interfaces = NULL;
-	GVariant *properties = NULL;
+	GVariant *interfaces = NULL;
 
 	//! We are extracting the object string (the device address).
 	//! We don't need this to return anything except the object_path because
 	//! We won't be calling any interfaces yet.
 	g_variant_get(parameters, "(&oa{sa{sv}})", &temp_object_path, &interfaces);
-	while(g_variant_iter_next(interfaces, "{&s*}", &interface_name, &properties))
+
+	if (num_devices < DEV_ARRAY_SIZE)
 	{
-		g_variant_take_ref(properties);
-		// If it's what we're looking for, save it to the list.
-		if(g_strstr_len(g_ascii_strdown(interface_name, -1), -1, "device"))
-		{
-			if (device_arr_i < DEV_ARR_SIZE - 1 )
-			{
-#ifdef DEBUG
-				g_print("Device Object Path: %s\n", temp_object_path);
-#endif
-				device_array[device_arr_i] = g_variant_new("s", temp_object_path); 
-				device_arr_i++;
-			}
-
-			break;
-		}
-		g_variant_unref(properties);
+		device_array[num_devices] = g_strdup(temp_object_path);
+		num_devices += 1;
 	}
-
-	// Free the iterator.
-	g_variant_iter_free(interfaces);
 }
 
 
@@ -84,11 +77,6 @@ extern void bluez_object_proxy_init(GDBusConnection *connection)
 			"g-signal::InterfacesAdded",
 			G_CALLBACK (on_signal_interfaces_added),
 			NULL);
-
-#ifdef DEBUG
-	// Print the owner ID of the proxy object.
-	print_proxy(bluez_object_proxy);
-#endif
 
 	return;
 

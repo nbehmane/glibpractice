@@ -6,8 +6,11 @@
 #include "dbushelper.h"
 
 #define DEBUG
+#define DEV_ARRAY_SIZE 50
 
-extern GVariant *bluez_object_get_devices();
+
+extern gchar **bluez_object_get_devices(gsize *num_devices);
+
 extern void bluez_object_proxy_init(GDBusConnection *connection);
 
 
