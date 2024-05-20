@@ -1,5 +1,6 @@
 #include "bluez_object.h"
 
+#define DEV_ARR_SIZE 25
 
 static GDBusProxy *bluez_object_proxy = NULL;
 

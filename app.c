@@ -1,4 +1,3 @@
-
 /**
  * @brief All application specific functions (signal handlers, interface definitions, etc.)
  * 	should go into a .c file. These functions should not be called directly (hence they're static).
@@ -40,13 +39,19 @@ static gboolean on_handle_scan(App *interface,
  * 		</method>
  * 	</interface>
  * </node>
+ *
+ * For the sake of time I'm calling this done for now even though I'm not happy about it.
  */
 static gboolean on_handle_get_scan_results(App *interface, 
 		GDBusMethodInvocation *invocation,
 		gpointer user_data)
 {
 	int i = 0;
-	const gchar *devices[DEV_ARRAY_SIZE] = { NULL };
+
+	// Don't ask me why this needs to be statically allocated.
+	// You can't dynamically allocate this otherwise app_complete_get_scan_results will cry
+	// about it.
+	const gchar *devices[DEV_ARR_SIZE] = { NULL };
 
 	GVariant *device_variants = bluez_object_get_devices();
 
