@@ -3,11 +3,14 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <gio/gio.h>
+#include "dbushelper.h"
 
 #define MAX_CONNECTIONS 2
 
 
 static GDBusProxy *bluez_device_setup_proxy(const gchar *object_path);
+
+extern GDBusProxy **bluez_device_get_proxies();
 
 extern void bluez_device_connect(const gchar *object_path);
 
