@@ -46,7 +46,7 @@ static gboolean on_handle_get_scan_results(App *interface,
 		gpointer user_data)
 {
 	int i = 0;
-	const gchar *devices[25] = { NULL };
+	const gchar *devices[DEV_ARRAY_SIZE] = { NULL };
 
 	GVariant *device_variants = bluez_object_get_devices();
 

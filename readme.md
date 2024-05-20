@@ -16,3 +16,9 @@
 
 ## Adding new method calls
 TODO...
+
+
+## TODO
+1. The way scan returns objects is disgusting.
+	- Find a more robust way to do this without exposing the user to GLIB.
+
