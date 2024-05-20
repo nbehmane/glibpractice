@@ -12,6 +12,7 @@
 void print_proxy(GDBusProxy *proxy);
 void print_error(GError *error);
 void print_is_floating(GVariant *variant);
+GVariant *object_tokenizer(const gchar *object_path, int max_tokens);
 
 
 #endif

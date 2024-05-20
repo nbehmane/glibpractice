@@ -32,10 +32,28 @@ void print_is_floating(GVariant *variant)
 	g_print("Not floating.\n");
 }
 
+// Example: /org/bluez/dev_xx_xx_xx_xx_xx_xx
 
-GVariant *object_tokenizer(gchar *object_path)
+GVariant *object_tokenizer(const gchar *object_path, int max_tokens)
 {
-	return NULL;
+	gchar **tokens = NULL;
+	GVariant *result = NULL;
+
+	tokens = g_strsplit(object_path, "/", max_tokens);
+
+
+	for (int i = 0; tokens[i] != NULL; i++)
+	{
+		if (i == max_tokens - 1)
+		{
+			result = g_variant_new("s", tokens[i]);
+			break;
+		}
+		result = NULL;
+
+	}
+	g_strfreev(tokens);
+	return result;
 }
 
 
