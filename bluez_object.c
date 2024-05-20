@@ -12,6 +12,9 @@ static int device_arr_i = 0;
  */
 extern GVariant *bluez_object_get_devices()
 {
+	// We haven't scanned so there aren't any devices.
+	if (device_arr_i == 0)
+		return NULL;
 	return g_variant_new_array(G_VARIANT_TYPE_STRING, device_array, device_arr_i);
 }
 
@@ -43,9 +46,9 @@ static void on_signal_interfaces_added(GDBusProxy* self, gchar* sender_name, gch
 #ifdef DEBUG
 				g_print("Device Object Path: %s\n", temp_object_path);
 #endif
-				//device_array[device_arr_i] = g_variant_new("s", temp_object_path); 
+				device_array[device_arr_i] = g_variant_new("s", temp_object_path); 
 				// We should only expect 5 tokens
-				device_array[device_arr_i] = object_tokenizer(temp_object_path, 5);
+				//device_array[device_arr_i] = object_tokenizer(temp_object_path, 5);
 				device_arr_i++;
 			}
 

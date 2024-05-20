@@ -20,7 +20,47 @@ static gboolean on_handle_connect(App *interface,
 		gpointer user_data)
 {
 
-	g_print("%s\n", dev_address);
+	int i = 0;
+
+	GVariant *device_variants = bluez_object_get_devices();
+
+	// Handle the case where we haven't scanned anything.
+	if (device_variants == NULL)
+	{
+		app_complete_connect(interface, invocation);
+		return TRUE;
+	}
+
+	int num_devices = g_variant_n_children(device_variants);
+
+	for (; i < num_devices; i++)
+	{
+		GVariant *device_path = g_variant_get_child_value(device_variants, i);
+
+		GVariant *tokenized_string = object_tokenizer(g_variant_get_string(device_path, NULL), 5);
+
+		const gchar *address = g_variant_get_string(tokenized_string, NULL);
+
+		if (!g_strcmp0(dev_address, address))
+		{
+			// We found the device.
+			const gchar *device_object_path = g_variant_get_string(device_path, NULL);
+
+#ifdef DEBUG
+			g_print("%s %s\n", device_object_path, address);
+#endif
+
+			// setup the connection proxy.
+			
+
+			// call the connect method and subscribe to properties changed signal for the device.
+		}
+
+		g_variant_unref(device_path);
+	}
+
+
+
 	app_complete_connect(interface, invocation);
 	return TRUE;
 }
@@ -74,13 +114,22 @@ static gboolean on_handle_get_scan_results(App *interface,
 
 	GVariant *device_variants = bluez_object_get_devices();
 
+	if (device_variants == NULL)
+	{
+		// For some reason there has to be two empty strings.
+		devices[0] = ""; devices[1] = "";
+		app_complete_get_scan_results(interface, invocation, devices);
+		return TRUE;
+	}
+
 	int num_devices = g_variant_n_children(device_variants);
 
 	for (; i < num_devices; i++)
 	{
 		GVariant *device_path = g_variant_get_child_value(device_variants, i);
+		GVariant *tokenized_string = object_tokenizer(g_variant_get_string(device_path, NULL), 5);
 
-		devices[i] = g_variant_get_string(device_path, NULL);
+		devices[i] = g_variant_get_string(tokenized_string, NULL);
 
 		g_variant_unref(device_path);
 	}
