@@ -7,7 +7,11 @@ static GVariant *device_array[DEV_ARR_SIZE] = { NULL };
 static int device_arr_i = 0; 
 
 /**
- * Returns GVariant of type 'as'.
+ * @brief Returns the devices from scanning. 
+ *
+ * @return A GVariant* array of type 'as'. Note that the device strings are
+ * 	in the form of object paths, not Bluetooth addresses. It's recommended
+ * 	to tokenize these when needed.
  *
  */
 extern GVariant *bluez_object_get_devices()

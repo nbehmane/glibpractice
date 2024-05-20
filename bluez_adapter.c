@@ -11,6 +11,12 @@ extern void bluez_adapter_scan(guint time);
 // Proxy handle
 static GDBusProxy *bluez_adapter_proxy = NULL;
 
+
+/**
+ * @brief Initiates scanning, populating the bluez.org namespace with device objects.
+ *
+ * @param s Set 1 to start scanning and 0 to stop scanning.
+ */
 extern void bluez_adapter_scan(guint s)
 {
 	GError *error = NULL;
@@ -31,9 +37,13 @@ extern void bluez_adapter_scan(guint s)
 
 
 /**
- * Function sets up the org.bluez.Adapter1 object for our Adapter wrapper. 
- * 
+ * @brief Initializes the GDBusProxy object to get access to the org.bluez.Adapter1 methods.
+ * 	Connects to two signals: g-properties-changed and g-signal. Currently, neither of 
+ * 	these signals are used. 
  *
+ * 	TODO: Make the selection of the controller dynamic.
+ *
+ * @param connection Not used.
  */
 extern void bluez_adapter_proxy_init(GDBusConnection *connection)
 {
@@ -44,7 +54,7 @@ extern void bluez_adapter_proxy_init(GDBusConnection *connection)
 			G_DBUS_PROXY_FLAGS_NONE,
 			NULL,
 			"org.bluez",
-			"/org/bluez/hci0", // TODO: make this dynamic. Select the controller during runtime.
+			"/org/bluez/hci0", 
 			"org.bluez.Adapter1",
 			NULL,
 			&error);	
