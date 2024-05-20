@@ -8,6 +8,25 @@
  */
 #include "app.h"
 
+
+
+
+//<method name="Connect">
+//	<arg name="devAddress" direction="in" type="s" />
+//</method>
+static gboolean on_handle_connect(App *interface,
+		GDBusMethodInvocation *invocation,
+		gchar *dev_address,
+		gpointer user_data)
+{
+
+	g_print("%s\n", dev_address);
+	app_complete_connect(interface, invocation);
+	return TRUE;
+}
+
+
+
 /*  
  * @brief XML definition for interface ti.example.App.xml
  *  <node>
@@ -90,6 +109,11 @@ static void on_name_acquired(GDBusConnection *connection,
 	g_signal_connect(app_interface,
 			"handle-get-scan-results",
 			G_CALLBACK (on_handle_get_scan_results),
+			NULL);
+
+	g_signal_connect(app_interface,
+			"handle-connect",
+			G_CALLBACK (on_handle_connect),
 			NULL);
 
 	g_dbus_interface_skeleton_export(G_DBUS_INTERFACE_SKELETON (app_interface), 

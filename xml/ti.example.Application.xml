@@ -8,5 +8,8 @@
 		</method>
 		<method name="ScanConnect">
 		</method>
+		<method name="Connect">
+			<arg name="devAddress" direction="in" type="s" />
+		</method>
 	</interface>
 </node>
