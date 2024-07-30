@@ -80,6 +80,10 @@ static gboolean on_handle_scan(App *interface,
 
 	//! Make proxy method call to Adapter1.StartDiscovery
 	bluez_adapter_scan(s);
+	if (s == 0)
+	{
+		bluez_object_delete_devices();
+	}
 	app_complete_scan(interface, invocation);
 	return TRUE;
 }

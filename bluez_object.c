@@ -6,6 +6,16 @@ static GDBusProxy *bluez_object_proxy = NULL;
 static GVariant *device_array[DEV_ARR_SIZE] = { NULL };
 static int device_arr_i = 0; 
 
+extern void bluez_object_delete_devices()
+{
+	int i = 0;
+	for (i = 0; i < device_arr_i; i++)
+	{
+		g_variant_unref(device_array[i]);
+	}
+	device_arr_i = 0;
+}
+
 /**
  * @brief Returns the devices from scanning. 
  *
