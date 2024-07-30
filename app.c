@@ -9,6 +9,7 @@
 #include "app.h"
 #define DEBUG
 
+
 //<method name="Connect">
 //	<arg name="devAddress" direction="in" type="s" />
 //</method>
@@ -47,14 +48,13 @@ static gboolean on_handle_connect(App *interface,
 #ifdef DEBUG
 			g_print("%s %s\n", device_object_path, address);
 #endif
+			g_print("%s\n", device_object_path);
 
 			bluez_device_connect(device_object_path);
 		}
 
 		g_variant_unref(device_path);
 	}
-
-
 
 	app_complete_connect(interface, invocation);
 	return TRUE;

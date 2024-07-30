@@ -1,28 +1,36 @@
 #include "bluez_device.h"
 
-static void on_device_properties_changed(GDBusProxy *proxy,
-				GVariant *changed_properties,
-				const gchar* const *invalidated_properties,
-				gpointer user_data);
+/* Forward Declarations */
+static void on_device_properties_changed(GDBusProxy *proxy, GVariant *changed_properties, const gchar* const *invalidated_properties, gpointer user_data);
+static void on_device_signal(GDBusProxy *proxy, gchar *sender_name, gchar *signal_name, GVariant *parameters, gpointer user_data);
 
-static void on_device_signal(GDBusProxy *proxy,
-		gchar *sender_name,
-		gchar *signal_name,
-		GVariant *parameters,
-		gpointer user_data);
-
-	
+/* Static variables and arrays */
 static GDBusProxy *device_proxies[MAX_CONNECTIONS] = { NULL };
+
 static int num_proxies = 0;
 
-
+/*
+ *  ======== bluez_device_get_proxies ========
+ */
 extern GDBusProxy **bluez_device_get_proxies()
 {
 	return NULL;
 }
 
+/*
+ *  ======== bluez_device_disconnect ========
+ */
+extern void bluez_device_disconnect(const gchar *object_path)
+{
+	//1. grab the correct proxy object.
+	//2. disconnect
+	//3. remove it from the list of device proxies.
+	return;
+}
 
-
+/*
+ *  ======== bluez_device_setup_proxy ========
+ */
 static GDBusProxy *bluez_device_setup_proxy(const gchar *object_path)
 {
 	//1. Create the proxy object from the path and connect it to the right interface org.bluez.Device1
@@ -70,6 +78,9 @@ out:
 
 }
 
+/*
+ *  ======== bluez_device_connect ========
+ */
 extern void bluez_device_connect(const gchar *object_path)
 {
 	GError *error = NULL;
@@ -97,37 +108,27 @@ extern void bluez_device_connect(const gchar *object_path)
 	return;
 }
 
-extern void bluez_device_disconnect(const gchar *object_path)
-{
-	//1. grab the correct proxy object.
-	//2. disconnect
-	//3. remove it from the list of device proxies.
-	return;
-}
-
-
-
-/**** SIGNAL HANDLERS START ****/
+/*
+ *  ======== on_device_signal ========
+ */
 static void on_device_signal(GDBusProxy *proxy,
 		gchar *sender_name,
 		gchar *signal_name,
 		GVariant *parameters,
 		gpointer user_data)
 {
-#ifdef DEBUG
 	g_print("Device: Signal\n");
-#endif
 }
 
-
+/*
+ *  ======== on_device_properties_changed ========
+ */
 static void on_device_properties_changed(GDBusProxy *proxy,
 				GVariant *changed_properties,
 				const gchar* const *invalidated_properties,
 				gpointer user_data)
 {
-#ifdef DEBUG
 	g_print("Device: Properties Changed\n");
-#endif
 }
 
 

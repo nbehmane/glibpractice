@@ -5,17 +5,11 @@
 static void on_adapter_properties_changed(GDBusProxy *proxy, GVariant *changed_properties, const gchar* const *invalidated_properties, gpointer user_data);
 static void on_adapter_signal(GDBusProxy *proxy, gchar *sender_name, gchar *signal_name, GVariant *parameters, gpointer user_data);
 
-// Method Calls
-extern void bluez_adapter_scan(guint time);
-
 // Proxy handle
 static GDBusProxy *bluez_adapter_proxy = NULL;
 
-
-/**
- * @brief Initiates scanning, populating the bluez.org namespace with device objects.
- *
- * @param s Set 1 to start scanning and 0 to stop scanning.
+/*
+ *  ======== bluez_adapter_scan ========
  */
 extern void bluez_adapter_scan(guint s)
 {
@@ -30,20 +24,11 @@ extern void bluez_adapter_scan(guint s)
 			NULL,
 			&error);
 
-
 	print_error(error);
 }
 
-
-
-/**
- * @brief Initializes the GDBusProxy object to get access to the org.bluez.Adapter1 methods.
- * 	Connects to two signals: g-properties-changed and g-signal. Currently, neither of 
- * 	these signals are used. 
- *
- * 	TODO: Make the selection of the controller dynamic.
- *
- * @param connection Not used.
+/*
+ *  ======== bluez_adapter_adapter_proxy_init ========
  */
 extern void bluez_adapter_proxy_init(GDBusConnection *connection)
 {
@@ -87,9 +72,9 @@ out:
 		g_object_unref(bluez_adapter_proxy);
 }
 
-
-
-/**** SIGNAL HANDLERS START ****/
+/*
+ *  ======== on_adapter_signal ========
+ */
 static void on_adapter_signal(GDBusProxy *proxy,
 		gchar *sender_name,
 		gchar *signal_name,
@@ -101,7 +86,9 @@ static void on_adapter_signal(GDBusProxy *proxy,
 #endif
 }
 
-
+/*
+ *  ======== on_adapter_properties_changed ========
+ */
 static void on_adapter_properties_changed(GDBusProxy *proxy,
 				GVariant *changed_properties,
 				const gchar* const *invalidated_properties,
@@ -111,4 +98,3 @@ static void on_adapter_properties_changed(GDBusProxy *proxy,
 	g_print("Adapter: Properties Changed\n");
 #endif
 }
-/**** SIGNAL HANDLERS END ****/

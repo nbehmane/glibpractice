@@ -5,7 +5,7 @@
 #include <gio/gio.h>
 #include "dbushelper.h"
 
-#define DEV_ARR_SIZE 256
+#define DEV_ARR_SIZE 500 
 
 /**
  * @brief Returns the devices from scanning. 

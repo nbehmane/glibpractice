@@ -11,5 +11,8 @@
 		<method name="Connect">
 			<arg name="devAddress" direction="in" type="s" />
 		</method>
+		<method name="Disconnect">
+			<arg name="devAddress" direction="in" type="s" />
+		</method>
 	</interface>
 </node>

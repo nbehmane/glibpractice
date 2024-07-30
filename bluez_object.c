@@ -1,28 +1,32 @@
 #include "bluez_object.h"
 
+/* Forward Declarations */
+static void on_signal_interfaces_added(GDBusProxy* self, gchar* sender_name, gchar* signal_name, GVariant* parameters, gpointer user_data);
 
+/* Static variables and arrays. */
 static GDBusProxy *bluez_object_proxy = NULL;
 
 static GVariant *device_array[DEV_ARR_SIZE] = { NULL };
+
 static int device_arr_i = 0; 
 
+/*
+ *  ======== bluez_object_delete_devices ========
+ */
 extern void bluez_object_delete_devices()
 {
 	int i = 0;
+
 	for (i = 0; i < device_arr_i; i++)
 	{
 		g_variant_unref(device_array[i]);
 	}
+
 	device_arr_i = 0;
 }
 
-/**
- * @brief Returns the devices from scanning. 
- *
- * @return A GVariant* array of type 'as'. Note that the device strings are
- * 	in the form of object paths, not Bluetooth addresses. It's recommended
- * 	to tokenize these when needed.
- *
+/*
+ *  ======== bluez_object_get_devices ========
  */
 extern GVariant *bluez_object_get_devices()
 {
@@ -33,10 +37,8 @@ extern GVariant *bluez_object_get_devices()
 }
 
 
-/**
- * @brief When an interface is added (a device) this callback occurs.
- * 	@param parameters We own this pointer. so we must unreference it when we don't want it anymore
- *
+/*
+ *  ======== on_signal_interfaces_added ========
  */
 static void on_signal_interfaces_added(GDBusProxy* self, gchar* sender_name, gchar* signal_name, GVariant* parameters, gpointer user_data)
 {
@@ -52,6 +54,7 @@ static void on_signal_interfaces_added(GDBusProxy* self, gchar* sender_name, gch
 	while(g_variant_iter_next(interfaces, "{&s*}", &interface_name, &properties))
 	{
 		g_variant_take_ref(properties);
+
 		// If it's what we're looking for, save it to the list.
 		if(g_strstr_len(g_ascii_strdown(interface_name, -1), -1, "device"))
 		{
@@ -75,9 +78,9 @@ static void on_signal_interfaces_added(GDBusProxy* self, gchar* sender_name, gch
 	g_variant_iter_free(interfaces);
 }
 
-
-
-
+/*
+ *  ======== bluez_object_proxy_init ========
+ */
 extern void bluez_object_proxy_init(GDBusConnection *connection)
 {
 	GError *error = NULL;
