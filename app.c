@@ -9,6 +9,56 @@
 #include "app.h"
 #define DEBUG
 
+//<method name="disonnect">
+//	<arg name="devAddress" direction="in" type="s" />
+//</method>
+static gboolean on_handle_disconnect(App *interface,
+		GDBusMethodInvocation *invocation,
+		gchar *dev_address,
+		gpointer user_data)
+{
+
+	int i = 0;
+
+	GVariant *device_variants = bluez_object_get_devices();
+
+	// Handle the case where we haven't scanned anything.
+	if (device_variants == NULL)
+	{
+		app_complete_connect(interface, invocation);
+		return TRUE;
+	}
+
+	int num_devices = g_variant_n_children(device_variants);
+
+	for (; i < num_devices; i++)
+	{
+		GVariant *device_path = g_variant_get_child_value(device_variants, i);
+
+		GVariant *tokenized_string = object_tokenizer(g_variant_get_string(device_path, NULL), 5);
+
+		const gchar *address = g_variant_get_string(tokenized_string, NULL);
+
+		if (!g_strcmp0(dev_address, address))
+		{
+			// We found the device.
+			const gchar *device_object_path = g_variant_get_string(device_path, NULL);
+
+#ifdef DEBUG
+			g_print("%s %s\n", device_object_path, address);
+			g_print("Disconnecting %s\n", device_object_path);
+#endif
+
+			bluez_device_disconnect(device_object_path);
+		}
+
+		g_variant_unref(device_path);
+	}
+
+	app_complete_connect(interface, invocation);
+	return TRUE;
+}
+
 
 //<method name="Connect">
 //	<arg name="devAddress" direction="in" type="s" />
@@ -47,8 +97,8 @@ static gboolean on_handle_connect(App *interface,
 
 #ifdef DEBUG
 			g_print("%s %s\n", device_object_path, address);
+			g_print("Connecting %s\n", device_object_path);
 #endif
-			g_print("%s\n", device_object_path);
 
 			bluez_device_connect(device_object_path);
 		}
@@ -162,6 +212,11 @@ static void on_name_acquired(GDBusConnection *connection,
 	g_signal_connect(app_interface,
 			"handle-connect",
 			G_CALLBACK (on_handle_connect),
+			NULL);
+
+	g_signal_connect(app_interface,
+			"handle-disconnect",
+			G_CALLBACK (on_handle_disconnect),
 			NULL);
 
 	g_dbus_interface_skeleton_export(G_DBUS_INTERFACE_SKELETON (app_interface), 

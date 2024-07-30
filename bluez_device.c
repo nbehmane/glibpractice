@@ -3,6 +3,7 @@
 /* Forward Declarations */
 static void on_device_properties_changed(GDBusProxy *proxy, GVariant *changed_properties, const gchar* const *invalidated_properties, gpointer user_data);
 static void on_device_signal(GDBusProxy *proxy, gchar *sender_name, gchar *signal_name, GVariant *parameters, gpointer user_data);
+static GDBusProxy *bluez_device_setup_proxy(const gchar *object_path);
 
 /* Static variables and arrays */
 static GDBusProxy *device_proxies[MAX_CONNECTIONS] = { NULL };
@@ -22,9 +23,57 @@ extern GDBusProxy **bluez_device_get_proxies()
  */
 extern void bluez_device_disconnect(const gchar *object_path)
 {
-	//1. grab the correct proxy object.
-	//2. disconnect
-	//3. remove it from the list of device proxies.
+	GError *error = NULL;
+	int i = 0;
+	for (i = 0; i < num_proxies; i++)
+	{
+		if (!g_strcmp0(object_path, g_dbus_proxy_get_object_path(device_proxies[i])))
+		{
+			g_dbus_proxy_call_sync(device_proxies[i],
+					"Disconnect",
+					g_variant_new("()", NULL),
+					G_DBUS_CALL_FLAGS_NONE,
+					-1,
+					NULL,
+					&error);
+
+			print_error(error);
+			break;
+	
+		}
+	}
+
+	// Free the proxy ebfore we return.
+	return;
+}
+
+/*
+ *  ======== bluez_device_connect ========
+ */
+extern void bluez_device_connect(const gchar *object_path)
+{
+	GError *error = NULL;
+
+	//1. Create the proxy object for the object path and store it somewhere. 
+	GDBusProxy *proxy_to_add = bluez_device_setup_proxy(object_path);
+
+	//! store the proxy
+	device_proxies[num_proxies] = proxy_to_add;
+
+	//! Increment the number of connections (proxies) we have
+	num_proxies += 1;
+
+	//! Call the Connect method 
+	g_dbus_proxy_call_sync(proxy_to_add,
+			"Connect",
+			g_variant_new("()", NULL),
+			G_DBUS_CALL_FLAGS_NONE,
+			-1,
+			NULL,
+			&error);
+
+	print_error(error);
+
 	return;
 }
 
@@ -79,36 +128,6 @@ out:
 }
 
 /*
- *  ======== bluez_device_connect ========
- */
-extern void bluez_device_connect(const gchar *object_path)
-{
-	GError *error = NULL;
-
-	//1. Create the proxy object for the object path and store it somewhere. 
-	GDBusProxy *proxy_to_add = bluez_device_setup_proxy(object_path);
-
-	//! store the proxy
-	device_proxies[num_proxies] = proxy_to_add;
-
-	//! Increment the number of connections (proxies) we have
-	num_proxies += 1;
-
-	//! Call the Connect method 
-	g_dbus_proxy_call_sync(proxy_to_add,
-			"Connect",
-			g_variant_new("()", NULL),
-			G_DBUS_CALL_FLAGS_NONE,
-			-1,
-			NULL,
-			&error);
-
-	print_error(error);
-
-	return;
-}
-
-/*
  *  ======== on_device_signal ========
  */
 static void on_device_signal(GDBusProxy *proxy,
@@ -117,7 +136,9 @@ static void on_device_signal(GDBusProxy *proxy,
 		GVariant *parameters,
 		gpointer user_data)
 {
+#if DEBUG
 	g_print("Device: Signal\n");
+#endif
 }
 
 /*
@@ -128,7 +149,9 @@ static void on_device_properties_changed(GDBusProxy *proxy,
 				const gchar* const *invalidated_properties,
 				gpointer user_data)
 {
+#if DEBUG 
 	g_print("Device: Properties Changed\n");
+#endif
 }
 
 
