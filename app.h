@@ -6,6 +6,7 @@
 #include "./gen/application.h"
 #include "bluez_adapter.h"
 #include "bluez_object.h"
+#include "bluez_device.h"
 
 extern void app_register_application();
 

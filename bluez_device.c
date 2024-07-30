@@ -12,13 +12,7 @@ static void on_device_signal(GDBusProxy *proxy,
 		gpointer user_data);
 
 	
-typedef struct _device_proxy
-{
-	gchar *device_path;
-	GDBusProxy *proxy;
-} DeviceProxy;
-
-static DeviceProxy *device_proxies[MAX_CONNECTIONS] = { NULL };
+static GDBusProxy *device_proxies[MAX_CONNECTIONS] = { NULL };
 static int num_proxies = 0;
 
 
@@ -78,9 +72,28 @@ out:
 
 extern void bluez_device_connect(const gchar *object_path)
 {
+	GError *error = NULL;
+
 	//1. Create the proxy object for the object path and store it somewhere. 
-	//2. Setup the signal handlers for the proxy object so we can manage the connection
-	//3. return
+	GDBusProxy *proxy_to_add = bluez_device_setup_proxy(object_path);
+
+	//! store the proxy
+	device_proxies[num_proxies] = proxy_to_add;
+
+	//! Increment the number of connections (proxies) we have
+	num_proxies += 1;
+
+	//! Call the Connect method 
+	g_dbus_proxy_call_sync(proxy_to_add,
+			"Connect",
+			g_variant_new("()", NULL),
+			G_DBUS_CALL_FLAGS_NONE,
+			-1,
+			NULL,
+			&error);
+
+	print_error(error);
+
 	return;
 }
 
