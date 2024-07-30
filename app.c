@@ -7,7 +7,6 @@
  *
  */
 #include "app.h"
-#define DEBUG
 
 //<method name="disonnect">
 //	<arg name="devAddress" direction="in" type="s" />
