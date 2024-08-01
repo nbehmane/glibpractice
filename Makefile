@@ -13,7 +13,9 @@ BIN=out
 gen:
 	@mkdir gen
 	@gdbus-codegen --generate-c-code application --interface-prefix ti.example. ./xml/ti.example.Application.xml
+	@gdbus-codegen --generate-c-code leadvertisement --interface-prefix org.bluez. ./xml/org.bluez.LEAdvertisement.xml
 	@mv application* ./gen
+	@mv leadvertisement.* ./gen
 
 # Commands to call over the bus
 scanon:

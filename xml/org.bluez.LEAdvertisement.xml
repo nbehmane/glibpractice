@@ -1,0 +1,16 @@
+<node>
+	<interface name="org.bluez.LEAdvertisement1">
+		<method name="Release">
+			<annotation name="org.freedesktop.DBus.Method.NoReply" value="true"/>
+		</method>
+
+		<annotation name="org.freedesktop.DBus.PropertiesChanged" value="const"/>
+	
+		<property name="Type" type="s" access="read"/>
+		<property name="ServiceUUIDs" type="as" access="read"/>
+		<property name="ManufacturerData" type="a{sv}" access="read"/>
+		<property name="SolicitUUIDs" type="as" access="read"/>
+		<property name="ServiceData" type="a{sv}" access="read"/>
+		<property name="IncludeTxPower" type="b" access="read"/>
+	</interface>
+</node>

@@ -4,6 +4,7 @@
 #include <stdint.h>
 #include <gio/gio.h>
 #include "./gen/application.h"
+#include "./gen/leadvertisement.h"
 #include "bluez_adapter.h"
 #include "bluez_object.h"
 #include "bluez_device.h"
