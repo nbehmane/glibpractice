@@ -14,7 +14,5 @@
 		<method name="Disconnect">
 			<arg name="devAddress" direction="in" type="s" />
 		</method>
-		<method name="Advertise">
-		</method>
 	</interface>
 </node>

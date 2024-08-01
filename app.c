@@ -8,6 +8,14 @@
  */
 #include "app.h"
 
+static gboolean on_handle_advertise(App *interface,
+		GDBusMethodInvocation *invocation,
+		gpointer user_data)
+{
+	app_complete_advertise(interface, invocation);
+	return TRUE;
+}
+
 //<method name="disonnect">
 //	<arg name="devAddress" direction="in" type="s" />
 //</method>
@@ -216,6 +224,11 @@ static void on_name_acquired(GDBusConnection *connection,
 	g_signal_connect(app_interface,
 			"handle-disconnect",
 			G_CALLBACK (on_handle_disconnect),
+			NULL);
+
+	g_signal_connect(app_interface,
+			"handle-advertise",
+			G_CALLBACK (on_handle_advertise),
 			NULL);
 
 	g_dbus_interface_skeleton_export(G_DBUS_INTERFACE_SKELETON (app_interface), 

@@ -15,11 +15,18 @@ gen:
 	@gdbus-codegen --generate-c-code application --interface-prefix ti.example. ./xml/ti.example.Application.xml
 	@mv application* ./gen
 
-
-scan:
+# Commands to call over the bus
+scanon:
 	gdbus call -e -d ti.example -o /ti/example/Application -m ti.example.App.Scan 1 
-result:
+
+scanoff:
+	gdbus call -e -d ti.example -o /ti/example/Application -m ti.example.App.Scan 0 
+
+getresults:
 	gdbus call -e -d ti.example -o /ti/example/Application -m ti.example.App.GetScanResults 
+
+advertise:
+	gdbus call -e -d ti.example -o /ti/example/Application -m ti.example.App.advertise 
 
 all: $(BIN)
 
