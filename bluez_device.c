@@ -43,9 +43,7 @@ extern void bluez_device_disconnect(const gchar *object_path)
 			print_error(error);
 			g_object_unref(device_proxies[i]);
 			num_proxies--;
-
 			break;
-	
 		}
 	}
 
