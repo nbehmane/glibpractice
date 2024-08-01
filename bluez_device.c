@@ -6,6 +6,8 @@ static void on_device_signal(GDBusProxy *proxy, gchar *sender_name, gchar *signa
 static GDBusProxy *bluez_device_setup_proxy(const gchar *object_path);
 
 /* Static variables and arrays */
+
+// It would be interesting if this were a hashtable.
 static GDBusProxy *device_proxies[MAX_CONNECTIONS] = { NULL };
 
 static int num_proxies = 0;
@@ -25,9 +27,10 @@ extern void bluez_device_disconnect(const gchar *object_path)
 {
 	GError *error = NULL;
 	int i = 0;
+
 	for (i = 0; i < num_proxies; i++)
 	{
-		if (!g_strcmp0(object_path, g_dbus_proxy_get_object_path(device_proxies[i])))
+		if (device_proxies[i] != NULL && !g_strcmp0(object_path, g_dbus_proxy_get_object_path(device_proxies[i])))
 		{
 			g_dbus_proxy_call_sync(device_proxies[i],
 					"Disconnect",
@@ -38,12 +41,14 @@ extern void bluez_device_disconnect(const gchar *object_path)
 					&error);
 
 			print_error(error);
+			g_object_unref(device_proxies[i]);
+			num_proxies--;
+
 			break;
 	
 		}
 	}
 
-	// Free the proxy ebfore we return.
 	return;
 }
 
