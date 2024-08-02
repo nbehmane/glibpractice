@@ -7,7 +7,7 @@ static GDBusProxy *bluez_device_setup_proxy(const gchar *object_path);
 
 /* Static variables and arrays */
 
-// It would be interesting if this were a hashtable.
+// TODO: Make this a hashtable. Could even be a Glib hashtable
 static GDBusProxy *device_proxies[MAX_CONNECTIONS] = { NULL };
 
 static int num_proxies = 0;

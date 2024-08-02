@@ -5,9 +5,7 @@ static void on_signal_interfaces_added(GDBusProxy* self, gchar* sender_name, gch
 
 /* Static variables and arrays. */
 static GDBusProxy *bluez_object_proxy = NULL;
-
 static GVariant *device_array[DEV_ARR_SIZE] = { NULL };
-
 static int device_arr_i = 0; 
 
 /*
