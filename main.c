@@ -1,8 +1,8 @@
 #include <gtk/gtk.h>
 #include "app.h"
 
-int main(void)
+int main(int argc, char **argv)
 {
-	app_start();
+	app_start(argc, argv);
 	return 0;
 }

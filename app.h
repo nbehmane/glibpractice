@@ -1,6 +1,6 @@
 #ifndef APP_H
 #define APP_H
 
-extern void app_start(void);
+extern int app_start(int argc, char **argv);
 
 #endif
