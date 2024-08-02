@@ -16,5 +16,7 @@
 		</method>
 		<method name="Advertise">
 		</method>
+		<method name="CreateAdv">
+		</method>
 	</interface>
 </node>

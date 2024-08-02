@@ -10,6 +10,17 @@
 		<property name="ManufacturerData" type="a{sv}" access="readwrite"/>
 		<property name="SolicitUUIDs" type="as" access="readwrite"/>
 		<property name="ServiceData" type="a{sv}" access="readwrite"/>
-		<property name="IncludeTxPower" type="b" access="readwrite"/>
+		<property name="Data" type="a{sv}" access="readwrite" />
+		<property name="Discoverable" type="b" access="readwrite" />
+		<property name="DiscoverableTimeout" type="i" access="readwrite" />
+		<property name="Includes" type="as" access="readwrite" />
+		<property name="LocalName" type="s" access="readwrite" />
+		<property name="Appearance" type="q" access="readwrite" />
+		<property name="Duration" type="q" access="readwrite" />
+		<property name="Timeout" type="q" access="readwrite" />
+		<property name="SecondaryChannel" type="s" access="readwrite" />
+		<property name="MinInterval" type="u" access="readwrite" />
+		<property name="MaxInterval" type="u" access="readwrite" />
+		<property name="TxPower" type="n" access="readwrite" />
 	</interface>
 </node>

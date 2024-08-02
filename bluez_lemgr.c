@@ -13,6 +13,8 @@ static LEAdvertisement1 *adv_interface = NULL;
 
 /*
  *  ======== bluez_lemgr_create_adv ========
+ *  TODO: Make it so this function takes in the properties.
+ *  That way it doesn't hardcode them
  */
 extern void bluez_lemgr_create_adv(GDBusConnection *connection, const gchar *object_path)
 {

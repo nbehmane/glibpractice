@@ -12,7 +12,7 @@
 static App *app_interface = NULL;
 static GDBusConnection *bus_connection = NULL;
 
-static gboolean on_handle_advertise(App *interface,
+static gboolean on_handle_create_adv(App *interface,
 		GDBusMethodInvocation *invocation,
 		gpointer user_data)
 {
@@ -20,6 +20,14 @@ static gboolean on_handle_advertise(App *interface,
 	/* Create the advertisment */
 	bluez_lemgr_create_adv(bus_connection, "/ti/example/advertisement0");
 
+	app_complete_create_adv(interface, invocation);
+	return TRUE;
+}
+
+static gboolean on_handle_advertise(App *interface,
+		GDBusMethodInvocation *invocation,
+		gpointer user_data)
+{
 	app_complete_advertise(interface, invocation);
 	return TRUE;
 }
@@ -81,6 +89,8 @@ static gboolean on_handle_connect(App *interface,
 	int i = 0;
 
 	GVariant *device_variants = bluez_object_get_devices();
+
+	//TODO: Clean this and the one above it up. 
 
 	// Handle the case where we haven't scanned anything.
 	if (device_variants == NULL)
@@ -226,6 +236,11 @@ static void on_name_acquired(GDBusConnection *connection,
 	g_signal_connect(app_interface,
 			"handle-advertise",
 			G_CALLBACK (on_handle_advertise),
+			NULL);
+
+	g_signal_connect(app_interface,
+			"handle-create-adv",
+			G_CALLBACK (on_handle_create_adv),
 			NULL);
 
 
