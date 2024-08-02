@@ -5,12 +5,15 @@ static void on_properties_changed(GDBusProxy *proxy, GVariant *changed_propertie
 static void on_signal(GDBusProxy *proxy, gchar *sender_name, gchar *signal_name, GVariant *parameters, gpointer user_data);
 static gboolean on_handle_release(LEAdvertisement1 *interface, GDBusMethodInvocation *invocation, gpointer user_data);
 
-extern void bluez_lemgr_proxy_init(GDBusConnection *connection);
-
 /* Static variables and arrays */
 static GDBusProxy *bluez_lemgr_proxy = NULL;
+
+// TODO: This should be a list because there could be multiple advertisments.
 static LEAdvertisement1 *adv_interface = NULL;
 
+/*
+ *  ======== bluez_lemgr_create_adv ========
+ */
 extern void bluez_lemgr_create_adv(GDBusConnection *connection, const gchar *object_path)
 {
 	adv_interface = leadvertisement1_skeleton_new();
@@ -31,17 +34,8 @@ extern void bluez_lemgr_create_adv(GDBusConnection *connection, const gchar *obj
 	
 }
 
-static gboolean on_handle_release(LEAdvertisement1 *interface,
-		GDBusMethodInvocation *invocation,
-		gpointer user_data)
-{
-	leadvertisement1_complete_release(interface, invocation);
-	return TRUE;
-}
-
-
 /*
- *  ======== bluez_lemgr_setup_proxy ========
+ *  ======== bluez_lemgr_register_adv ========
  */
 extern void bluez_lemgr_register_adv(const gchar *object_path)
 {
@@ -121,3 +115,16 @@ static void on_properties_changed(GDBusProxy *proxy,
 	g_print("LEMgr: Properties Changed\n");
 #endif
 }
+
+/*
+ *  ======== on_handle_release ========
+ */
+static gboolean on_handle_release(LEAdvertisement1 *interface,
+		GDBusMethodInvocation *invocation,
+		gpointer user_data)
+{
+	// TODO: Free any data that was allocated by this advertisement.
+	leadvertisement1_complete_release(interface, invocation);
+	return TRUE;
+}
+
