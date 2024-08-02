@@ -8,35 +8,17 @@
  */
 #include "app.h"
 
-App *app_interface = NULL;
-LEAdvertisement1 *adv_interface = NULL;
-GDBusConnection *bus_connection = NULL;
-
-static gboolean on_handle_release(LEAdvertisement1 *interface,
-		GDBusMethodInvocation *invocation,
-		gpointer user_data)
-{
-	leadvertisement1_complete_release(interface, invocation);
-	return TRUE;
-}
+/* Static Vars */
+static App *app_interface = NULL;
+static GDBusConnection *bus_connection = NULL;
 
 static gboolean on_handle_advertise(App *interface,
 		GDBusMethodInvocation *invocation,
 		gpointer user_data)
 {
-	// Advertisement Object
-	g_signal_connect(adv_interface,
-			"handle-release",
-			G_CALLBACK (on_handle_release),
-			NULL);
 
-	// Set properties
-	leadvertisement1_set_type_ (adv_interface, "peripheral");
-
-	g_dbus_interface_skeleton_export(G_DBUS_INTERFACE_SKELETON (adv_interface), 
-			bus_connection, 
-			"/ti/example/Application",
-			NULL);
+	/* Create the advertisment */
+	bluez_lemgr_create_adv(bus_connection, "/ti/example/advertisement0");
 
 	app_complete_advertise(interface, invocation);
 	return TRUE;
@@ -52,7 +34,6 @@ static gboolean on_handle_disconnect(App *interface,
 {
 
 	int i = 0;
-
 	GVariant *device_variants = bluez_object_get_devices();
 
 	// Handle the case where we haven't scanned anything.
@@ -63,25 +44,20 @@ static gboolean on_handle_disconnect(App *interface,
 	}
 
 	int num_devices = g_variant_n_children(device_variants);
-
 	for (; i < num_devices; i++)
 	{
 		GVariant *device_path = g_variant_get_child_value(device_variants, i);
-
 		GVariant *tokenized_string = object_tokenizer(g_variant_get_string(device_path, NULL), 5);
-
 		const gchar *address = g_variant_get_string(tokenized_string, NULL);
 
 		if (!g_strcmp0(dev_address, address))
 		{
 			// We found the device.
 			const gchar *device_object_path = g_variant_get_string(device_path, NULL);
-
 #ifdef DEBUG
 			g_print("%s %s\n", device_object_path, address);
 			g_print("Disconnecting %s\n", device_object_path);
 #endif
-
 			bluez_device_disconnect(device_object_path);
 		}
 
@@ -118,24 +94,19 @@ static gboolean on_handle_connect(App *interface,
 	for (; i < num_devices; i++)
 	{
 		GVariant *device_path = g_variant_get_child_value(device_variants, i);
-
 		GVariant *tokenized_string = object_tokenizer(g_variant_get_string(device_path, NULL), 5);
-
 		const gchar *address = g_variant_get_string(tokenized_string, NULL);
 
 		if (!g_strcmp0(dev_address, address))
 		{
 			// We found the device.
 			const gchar *device_object_path = g_variant_get_string(device_path, NULL);
-
 #ifdef DEBUG
 			g_print("%s %s\n", device_object_path, address);
 			g_print("Connecting %s\n", device_object_path);
 #endif
-
 			bluez_device_connect(device_object_path);
 		}
-
 		g_variant_unref(device_path);
 	}
 
@@ -231,7 +202,6 @@ static void on_name_acquired(GDBusConnection *connection,
 
 	/* Setting up AppInfo interface */
 	app_interface = app_skeleton_new();
-	adv_interface = leadvertisement1_skeleton_new();
 
 	g_signal_connect(app_interface,
 			"handle-scan",
@@ -266,6 +236,7 @@ static void on_name_acquired(GDBusConnection *connection,
 	
 	bluez_adapter_proxy_init(connection);
 	bluez_object_proxy_init(connection);
+	bluez_lemgr_proxy_init(connection);
 
 }
 

@@ -157,7 +157,3 @@ static void on_device_properties_changed(GDBusProxy *proxy,
 #endif
 }
 
-
-
-
-

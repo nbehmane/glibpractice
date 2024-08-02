@@ -8,6 +8,7 @@
 #include "bluez_adapter.h"
 #include "bluez_object.h"
 #include "bluez_device.h"
+#include "bluez_lemgr.h"
 
 extern void app_register_application();
 
