@@ -8,6 +8,10 @@
  */
 #include "app.h"
 
+App *app_interface = NULL;
+LEAdvertisement1 *adv_interface = NULL;
+GDBusConnection *bus_connection = NULL;
+
 static gboolean on_handle_release(LEAdvertisement1 *interface,
 		GDBusMethodInvocation *invocation,
 		gpointer user_data)
@@ -20,6 +24,20 @@ static gboolean on_handle_advertise(App *interface,
 		GDBusMethodInvocation *invocation,
 		gpointer user_data)
 {
+	// Advertisement Object
+	g_signal_connect(adv_interface,
+			"handle-release",
+			G_CALLBACK (on_handle_release),
+			NULL);
+
+	// Set properties
+	leadvertisement1_set_type_ (adv_interface, "peripheral");
+
+	g_dbus_interface_skeleton_export(G_DBUS_INTERFACE_SKELETON (adv_interface), 
+			bus_connection, 
+			"/ti/example/Application",
+			NULL);
+
 	app_complete_advertise(interface, invocation);
 	return TRUE;
 }
@@ -209,10 +227,7 @@ static void on_name_acquired(GDBusConnection *connection,
 		gpointer user_data)
 {
 	GError *error = NULL;
-
-	App *app_interface = NULL;
-	LEAdvertisement1 *adv_interface = NULL;
-
+	bus_connection = connection;
 
 	/* Setting up AppInfo interface */
 	app_interface = app_skeleton_new();
@@ -243,17 +258,8 @@ static void on_name_acquired(GDBusConnection *connection,
 			G_CALLBACK (on_handle_advertise),
 			NULL);
 
-	g_signal_connect(adv_interface,
-			"handle-release",
-			G_CALLBACK (on_handle_release),
-			NULL);
 
 	g_dbus_interface_skeleton_export(G_DBUS_INTERFACE_SKELETON (app_interface), 
-			connection, 
-			"/ti/example/Application",
-			&error);
-
-	g_dbus_interface_skeleton_export(G_DBUS_INTERFACE_SKELETON (adv_interface), 
 			connection, 
 			"/ti/example/Application",
 			&error);
