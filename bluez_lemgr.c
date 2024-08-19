@@ -66,18 +66,19 @@ extern void bluez_lemgr_create_adv(GDBusConnection *connection, const gchar *obj
  */
 extern void bluez_lemgr_register_adv(const gchar *object_path)
 {	
-	/*
 	GError *error = NULL;
+
 
 	g_dbus_proxy_call_sync( bluez_lemgr_proxy,
 			"RegisterAdvertisement",
+			g_variant_new("(oa{sv})", g_dbus_proxy_get_object_path(adv_proxy), NULL),
 			G_DBUS_CALL_FLAGS_NONE,
 			-1,
 			NULL,
 			&error);
 
 	print_error(error);
-	*/
+
 	return;
 }
 
