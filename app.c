@@ -11,6 +11,9 @@
 /* Static Vars */
 static App *app_interface = NULL;
 static GDBusConnection *bus_connection = NULL;
+static GDBusConnection *system_bus = NULL;
+
+const gchar *adv_path = "/ti/example/advertisement0";
 
 static gboolean on_handle_create_adv(App *interface,
 		GDBusMethodInvocation *invocation,
@@ -18,7 +21,8 @@ static gboolean on_handle_create_adv(App *interface,
 {
 
 	/* Create the advertisment */
-	bluez_lemgr_create_adv(bus_connection, "/ti/example/advertisement0");
+	/* We really should be creating the advertisement on the system bus: org.bluez*/
+	bluez_lemgr_create_adv(bus_connection, adv_path, 27);
 
 	app_complete_create_adv(interface, invocation);
 	return TRUE;
@@ -28,6 +32,7 @@ static gboolean on_handle_advertise(App *interface,
 		GDBusMethodInvocation *invocation,
 		gpointer user_data)
 {
+	bluez_lemgr_register_adv(NULL);
 	app_complete_advertise(interface, invocation);
 	return TRUE;
 }
@@ -203,7 +208,7 @@ static gboolean on_handle_get_scan_results(App *interface,
 
 
 
-static void on_name_acquired(GDBusConnection *connection, 
+static void on_name_acquired_session(GDBusConnection *connection, 
 		const gchar *name, 
 		gpointer user_data)
 {
@@ -255,7 +260,6 @@ static void on_name_acquired(GDBusConnection *connection,
 
 }
 
-
 extern void app_register_application()
 {
 	// This is the MAIN application session.
@@ -263,10 +267,11 @@ extern void app_register_application()
 			"ti.example",
 			G_BUS_NAME_OWNER_FLAGS_NONE,
 			NULL,
-			on_name_acquired,
+			on_name_acquired_session,
 			NULL,
 			NULL,
 			NULL);
+
 
 }
 

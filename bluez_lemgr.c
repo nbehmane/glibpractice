@@ -11,13 +11,23 @@ static GDBusProxy *bluez_lemgr_proxy = NULL;
 // TODO: This should be a list because there could be multiple advertisments.
 static LEAdvertisement1 *adv_interface = NULL;
 
+static gchar *adv_path = NULL;
+
+static GDBusProxy *adv_proxy = NULL;
+
 /*
  *  ======== bluez_lemgr_create_adv ========
  *  TODO: Make it so this function takes in the properties.
  *  That way it doesn't hardcode them
  */
-extern void bluez_lemgr_create_adv(GDBusConnection *connection, const gchar *object_path)
+extern void bluez_lemgr_create_adv(GDBusConnection *connection, const gchar *object_path, gsize path_size)
 {
+	if (object_path == NULL)
+		return;
+
+	/* copy the path to be used when registering the advertisement */
+	adv_path = g_memdup2(object_path, path_size);
+
 	adv_interface = leadvertisement1_skeleton_new();
 
 	// Advertisement Object
@@ -33,15 +43,42 @@ extern void bluez_lemgr_create_adv(GDBusConnection *connection, const gchar *obj
 			connection, 
 			object_path,
 			NULL);
-	
+
+	/* At this point we actualy need to get the advertisment object */
+
+	GError *error = NULL;
+
+	// This will allow us to call methods via the proxy.
+	adv_proxy = g_dbus_proxy_new_for_bus_sync(G_BUS_TYPE_SESSION,
+			G_DBUS_PROXY_FLAGS_NONE,
+			NULL,
+			"ti.example",
+			adv_path, 
+			"org.bluez.LEAdvertisement1",
+			NULL,
+			&error);	
+
+	print_error(error);
 }
 
 /*
  *  ======== bluez_lemgr_register_adv ========
  */
 extern void bluez_lemgr_register_adv(const gchar *object_path)
-{
-	;
+{	
+	/*
+	GError *error = NULL;
+
+	g_dbus_proxy_call_sync( bluez_lemgr_proxy,
+			"RegisterAdvertisement",
+			G_DBUS_CALL_FLAGS_NONE,
+			-1,
+			NULL,
+			&error);
+
+	print_error(error);
+	*/
+	return;
 }
 
 /*

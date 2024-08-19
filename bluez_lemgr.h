@@ -26,7 +26,7 @@ extern void bluez_lemgr_register_adv(const gchar *object_path);
  *  @param connection		The bus to create the advertisment object on (i.e name). 
  *  @param object_path		Object path for the advertisement. 
  */
-extern void bluez_lemgr_create_adv(GDBusConnection *connection, const gchar *object_path);
+extern void bluez_lemgr_create_adv(GDBusConnection *connection, const gchar *object_path, gsize path_size);
 
 
 #endif
